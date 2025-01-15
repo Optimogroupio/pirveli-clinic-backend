@@ -1,0 +1,245 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+directive @setLocale on FIELD_DEFINITION
+
+
+type Query {
+    services(
+        name: String
+        description: String
+        service_category_id: ID
+        locale: String!
+    ): [Service!]! @paginate(
+        defaultCount: 21
+        builder: "App\\GraphQL\\Builders\\ServiceBuilder@filterServices"
+    ) @setLocale
+
+    all_services(
+        name: String
+        description: String
+        service_category_id: ID
+        locale: String!
+    ): [Service!]! @all @setLocale
+
+    service(slug: String @eq, locale: String): Service @find @setLocale
+    service_categories(locale: String): [ServiceCategory] @all @setLocale
+
+    doctors(
+        full_name: String
+        specialty_id: ID
+        specialty_name: String
+        locale: String!
+    ): [Doctor!]! @paginate(
+        builder: "App\\GraphQL\\Builders\\DoctorBuilder@filterDoctors"
+        defaultCount: 16
+    ) @setLocale
+
+    all_doctors(
+        full_name: String
+        specialty_id: ID
+        specialty_name: String
+        locale: String!
+    ): [Doctor!]! @all @setLocale
+
+    doctor(locale: String!, slug: String! @eq): Doctor @find @setLocale
+
+    news_list(locale: String): [News!]! @paginate(defaultCount: 10) @setLocale
+    single_news(slug: String @eq, locale: String!): News @find @setLocale
+
+    locales: [Locale!]! @all
+
+    pages(locale: String!): [Page!]! @all @setLocale
+    page(slug: String @eq, locale: String!): Page @find @setLocale
+
+    specialties(locale: String!): [Specialty!]! @all @setLocale
+
+
+
+}
+
+type Mutation {
+    createAppointment(
+        name: String
+        surname: String
+        specialty_id: ID
+        doctor_id: ID
+        phone: String
+    ): AppointmentPayload @field(resolver: "App\\GraphQL\\Mutations\\CreateAppointmentMutation") @validator
+}
+
+"Dashboard user."
+type DashboardUser {
+    id: ID!
+    first_name: String!
+    last_name: String!
+    login: String!
+    email: String!
+    super_admin: Boolean
+    last_login: DateTime
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"Service Category"
+type ServiceCategory{
+    id: ID!
+    name: String!
+    slug: String!
+    description: String!
+    translations: [Translation] @morphMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"Service"
+type Service{
+    id: ID!
+    name: String!
+    slug: String
+    description: String!
+    svg: String
+    service_category: ServiceCategory @belongsTo
+    doctors: [Doctor] @hasMany
+    news: [News] @hasMany
+    translations: [Translation] @morphMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+
+"Page"
+type Page{
+    id: ID!
+    name: String!
+    slug: String!
+    description: String!
+    meta_title: String
+    meta_description: String
+    translations: [Translation] @morphMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"News"
+type News{
+    id: ID!
+    title: String!
+    slug: String
+    description: String
+    service: Service @belongsTo
+    meta_title: String
+    meta_description: String
+    translations: [Translation] @morphMany
+    image: FileAttachment @morphOne
+    related_news: [News!]! @field(resolver: "App\\GraphQL\\Queries\\OtherNewsQuery@relatedNews")
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"FileAttachment"
+type FileAttachment{
+    id: ID!
+    file_name: String!
+    disk_name: String!
+    content_type: String!
+    file_size: String!
+    attachment_type: String!
+    attachment_id: Int!
+    field: String!
+    is_public: Boolean
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"Translation"
+type Translation{
+    id: ID!
+    translatable_type: String!
+    translatable_id: Int!
+    locale: String!
+    key: String!
+    value: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"Language"
+type Language{
+    id: ID!
+    name: String!
+    translations: [Translation] @morphMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Doctor {
+    id: ID
+    full_name: String
+    slug: String
+    specialties: [Specialty] @belongsToMany
+    service: Service @belongsTo
+    educations: [DoctorDetail] @hasMany(relation: "educations")
+    experiences: [DoctorDetail] @hasMany(relation: "experiences")
+    certificates: [DoctorDetail] @hasMany(relation: "certificates")
+    languages: [Language] @belongsToMany
+    other_doctors: [Doctor!]! @field(resolver: "App\\GraphQL\\Queries\\OtherDoctorsQuery@otherDoctors")
+    news: [News] @belongsToMany
+    translations: [Translation] @morphMany
+    image: FileAttachment @morphOne
+    meta_title: String
+    meta_description: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"DoctorDetail"
+type DoctorDetail{
+    id: ID!
+    doctor_id: Int
+    type: String!
+    name: String!
+    title: String!
+    start_date: String!
+    end_date: String
+    to_this_day: Boolean
+    translations: [Translation] @morphMany
+    sort_order: Int
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"Specialty"
+type Specialty{
+    id: ID!
+    name: String!
+    translations: [Translation] @morphMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"Locale"
+type Locale{
+    id: ID!
+    name: String!
+    code: String!
+    is_default: Boolean
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Appointment {
+    id: ID!
+    name: String!
+    surname: String!
+    specialty: Specialty
+    doctor: Doctor
+    phone: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type AppointmentPayload {
+    success: Boolean!
+    message: String!
+    appointment: Appointment
+}
