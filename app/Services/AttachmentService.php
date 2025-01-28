@@ -18,7 +18,7 @@ class AttachmentService
      * @param string|null $directory
      * @return FileAttachment
      */
-    public function attachFile(Model $model, $file, string $fieldName, ?string $directory): FileAttachment
+    public function attachFile(Model $model, $file, string $fieldName, $directory = null): FileAttachment
     {
         $directory = $directory ?? $model->getTable() . '/' . $fieldName;
 
