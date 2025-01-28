@@ -16,6 +16,7 @@ use App\Http\Controllers\Dashboard\DashboardServiceController;
 use App\Http\Controllers\Dashboard\DashboardSettingsController;
 use App\Http\Controllers\Dashboard\DashboardSliderController;
 use App\Http\Controllers\Dashboard\DashboardSpecialtyController;
+use App\Models\Doctor;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;

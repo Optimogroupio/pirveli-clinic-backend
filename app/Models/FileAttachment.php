@@ -19,16 +19,13 @@ class FileAttachment extends Model
      */
     public function getUrlAttribute()
     {
-        // Parse the attachment type (e.g., extract the model's table name)
-        $modelName = class_basename($this->attachment_type); // Extracts 'News' from 'App\Model\News'
+        $modelName = class_basename($this->attachment_type);
 
-        // Convert the model name to lowercase (or use another transformation if needed)
-        $modelDirectory = Str::snake($modelName); // Converts 'News' to 'news'
+        $modelInstance = app("App\\Models\\{$modelName}");
+        $tableName = $modelInstance->getTable();
 
-        // Construct the dynamic path using the field and disk_name
-        $dynamicPath = "{$modelDirectory}/{$this->field}/{$this->disk_name}";
 
-        // Return the full URL using the Storage facade
+        $dynamicPath = "{$tableName}/{$this->field}/{$this->disk_name}";
         return url(Storage::url($dynamicPath));
     }
 

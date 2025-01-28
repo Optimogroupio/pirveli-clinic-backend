@@ -150,6 +150,7 @@ type FileAttachment{
     attachment_id: Int!
     field: String!
     is_public: Boolean
+    url: String
     created_at: DateTime!
     updated_at: DateTime!
 }
