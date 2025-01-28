@@ -18,6 +18,7 @@ class DashboardUpdateDoctorRequest extends TranslatableRequest
             'service_id' => 'required|exists:services,id',
             'specialties' => 'required|array',
             'languages' => 'required|array',
+            'image' => 'file_attachment',
             'meta_title' => 'string|nullable',
             'meta_description' => 'string|nullable'
         ];

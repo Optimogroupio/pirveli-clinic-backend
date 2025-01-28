@@ -8,6 +8,7 @@
                     { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', translatable: true, size: 'full' },
                     { key: 'service_id', label: 'Service', type: 'select', options: services, labelKey: 'name', valueKey: 'id', placeholder: 'Select service' },
                     { key: 'doctors', label: 'Doctors', type: 'multi-select', options: doctors, labelKey: 'full_name', valueKey: 'id', placeholder: 'Select doctors', size: 'inline' },
+                    { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'half' },
                     { key: 'meta_title', label: 'Meta Title', type: 'text', placeholder: 'Enter meta title', translatable: true },
                     { key: 'meta_description', label: 'Meta Description', type: 'textarea', placeholder: 'Enter meta description', translatable: true },
                 ]"
@@ -15,6 +16,7 @@
                     title: news.title,
                     description: news.description,
                     service_id: news.service_id,
+                    image: news.image,
                     doctors: (news.doctors || []).map(doctor => doctor.id),
                     meta_title: news.meta_title,
                     meta_description: news.meta_description,
@@ -46,7 +48,8 @@
             const news = props.news;
 
             const handleUpdate = (data) => {
-                Inertia.patch(`/dashboard/news/${news.id}`, data);
+                data._method = "put";
+                Inertia.post(`/dashboard/news/${news.id}`, data);
             };
 
             return {

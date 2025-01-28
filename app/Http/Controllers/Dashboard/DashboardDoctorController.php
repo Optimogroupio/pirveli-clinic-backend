@@ -96,7 +96,7 @@ class DashboardDoctorController extends Controller
      */
     public function edit($id)
     {
-        $doctor = $this->doctorRepository->find($id, ['translations', 'languages', 'educations', 'experiences', 'certificates', 'specialties']);
+        $doctor = $this->doctorRepository->find($id, ['translations', 'languages', 'image', 'educations', 'experiences', 'certificates', 'specialties']);
         $services = $this->serviceRepository->all();
         $specialties = $this->specialtyRepository->all();
         $languages = $this->languageRepository->all();

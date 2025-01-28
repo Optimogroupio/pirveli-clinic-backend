@@ -18,6 +18,7 @@ class DashboardStoreDoctorRequest extends TranslatableRequest
             'service_id' => 'required|exists:services,id',
             'specialties' => 'required|array',
             'languages' => 'required|array',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'meta_title' => 'string|nullable',
             'meta_description' => 'string|nullable'
         ];

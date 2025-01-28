@@ -80,6 +80,24 @@
             </li>
             <li>
                 <Link
+                    href="/dashboard/slider"
+                    :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/slider') }]"
+                >
+                    <i class="fa-solid fa-image mr-2"></i>
+                    Slider
+                </Link>
+            </li>
+            <li class="hidden">
+                <Link
+                    href="/dashboard/settings"
+                    :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/settings') }]"
+                >
+                    <i class="fa-solid fa-gears mr-2"></i>
+                    Settings
+                </Link>
+            </li>
+            <li>
+                <Link
                     href="/dashboard/languages"
                     :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/languages') }]"
                 >

@@ -21,7 +21,7 @@ class DashboardPermissionService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedPermissions(array $filters, int $perPage = 10)
+    public function getPaginatedPermissions(array $filters, int $perPage = 10): mixed
     {
         return $this->permissionRepository->query()
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
@@ -34,7 +34,7 @@ class DashboardPermissionService
      * Get all records
      * @return mixed
      */
-    public function getAllPermissions()
+    public function getAllPermissions(): mixed
     {
         return $this->permissionRepository->all();
     }
@@ -44,7 +44,7 @@ class DashboardPermissionService
      * @param $id
      * @return mixed
      */
-    public function getPermissionById($id)
+    public function getPermissionById($id): mixed
     {
         return $this->permissionRepository->find($id);
     }
@@ -54,7 +54,7 @@ class DashboardPermissionService
      * @param array $data
      * @return mixed
      */
-    public function createPermission(array $data)
+    public function createPermission(array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -76,7 +76,7 @@ class DashboardPermissionService
      * @param array $data
      * @return mixed
      */
-    public function updatePermission($id, array $data)
+    public function updatePermission($id, array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -97,7 +97,7 @@ class DashboardPermissionService
      * @param int $id
      * @return mixed
      */
-    public function deletePermission(int $id)
+    public function deletePermission(int $id): mixed
     {
         try {
             DB::beginTransaction();

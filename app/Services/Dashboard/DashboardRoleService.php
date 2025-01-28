@@ -24,7 +24,7 @@ class DashboardRoleService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedPermissions(array $filters, int $perPage = 10)
+    public function getPaginatedPermissions(array $filters, int $perPage = 10): mixed
     {
         return $this->roleRepository->query()
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
@@ -38,7 +38,7 @@ class DashboardRoleService
      * @param array $data
      * @return mixed
      */
-    public function createRole(array $data)
+    public function createRole(array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -63,7 +63,7 @@ class DashboardRoleService
      * @param array $data
      * @return mixed
      */
-    public function updateRole($id, array $data)
+    public function updateRole($id, array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -86,7 +86,7 @@ class DashboardRoleService
      * @param $id
      * @return mixed
      */
-    public function deleteRole($id)
+    public function deleteRole($id): mixed
     {
         try {
             DB::beginTransaction();

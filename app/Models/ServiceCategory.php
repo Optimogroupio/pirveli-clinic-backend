@@ -27,4 +27,8 @@ class ServiceCategory extends Model
 
     public $translatableAttributes = ['name', 'description'];
 
+    public function services(){
+        return $this->hasMany(Service::class);
+    }
+
 }

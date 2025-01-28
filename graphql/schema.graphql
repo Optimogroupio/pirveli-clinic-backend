@@ -53,6 +53,8 @@ type Query {
 
     specialties(locale: String!): [Specialty!]! @all @setLocale
 
+    settings(locale: String!): [Settings!]! @all @setLocale
+
 
 
 }
@@ -86,6 +88,7 @@ type ServiceCategory{
     name: String!
     slug: String!
     description: String!
+    services: [Service] @hasMany
     translations: [Translation] @morphMany
     created_at: DateTime!
     updated_at: DateTime!
@@ -172,6 +175,7 @@ type Language{
     updated_at: DateTime!
 }
 
+"Doctor"
 type Doctor {
     id: ID
     full_name: String
@@ -226,7 +230,7 @@ type Locale{
     created_at: DateTime!
     updated_at: DateTime!
 }
-
+"Appointment"
 type Appointment {
     id: ID!
     name: String!
@@ -238,6 +242,19 @@ type Appointment {
     updated_at: DateTime!
 }
 
+"Settings"
+type Settings{
+    id: ID!
+    key: String!
+    value: String
+    banner_image: FileAttachment @morphOne
+    logo: FileAttachment @morphOne
+    translations: [Translation] @morphMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"AppointmentPayload"
 type AppointmentPayload {
     success: Boolean!
     message: String!

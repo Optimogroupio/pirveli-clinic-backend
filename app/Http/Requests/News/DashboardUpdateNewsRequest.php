@@ -19,7 +19,7 @@ class DashboardUpdateNewsRequest extends TranslatableRequest
             'service_id' => 'required|exists:services,id',
             'doctors' => 'required|array',
             'doctors.*' => 'exists:doctors,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'file_attachment',
             'meta_title' => 'string|nullable',
             'meta_description' => 'string|nullable',
         ];

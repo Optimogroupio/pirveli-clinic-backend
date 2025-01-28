@@ -43,7 +43,7 @@ class DashboardLocaleService
      * @param array $data
      * @return mixed
      */
-    public function createLocale(array $data)
+    public function createLocale(array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -65,7 +65,7 @@ class DashboardLocaleService
      * @param array $data
      * @return mixed
      */
-    public function updateLocale($id, array $data)
+    public function updateLocale($id, array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -86,7 +86,7 @@ class DashboardLocaleService
      * @param int $id
      * @return mixed
      */
-    public function deleteLocale(int $id)
+    public function deleteLocale(int $id): mixed
     {
         try {
             DB::beginTransaction();

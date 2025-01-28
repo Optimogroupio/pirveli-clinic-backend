@@ -21,7 +21,7 @@ class DashboardAppointmentService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedAppointments(array $filters, int $perPage = 10)
+    public function getPaginatedAppointments(array $filters, int $perPage = 10): mixed
     {
         return $this->appointmnetRepository->query()
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
@@ -35,7 +35,7 @@ class DashboardAppointmentService
      * @param array $data
      * @return mixed
      */
-    public function createAppointment(array $data)
+    public function createAppointment(array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -58,7 +58,7 @@ class DashboardAppointmentService
      * @param mixed $data
      * @return mixed
      */
-    public function updateAppointment($id, mixed $data)
+    public function updateAppointment($id, mixed $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -82,7 +82,7 @@ class DashboardAppointmentService
      * @param $id
      * @return mixed
      */
-    public function deleteAppointment($id)
+    public function deleteAppointment($id): mixed
     {
         try {
             DB::beginTransaction();

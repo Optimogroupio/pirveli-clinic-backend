@@ -18,27 +18,22 @@ class AttachmentService
      * @param string|null $directory
      * @return FileAttachment
      */
-    public function attachFile(Model $model, $file, string $fieldName)
+    public function attachFile(Model $model, $file, string $fieldName): FileAttachment
     {
-        // Dynamically create the directory based on the model and field name
         $directory = $directory ?? $model->getTable() . '/' . $fieldName;
 
-        // Generate a unique file name with extension
         $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
 
-        // Store the file using the generated unique name in the dynamic directory
         $relativePath = $file->storeAs($directory, $fileName, 'public');
 
-        // Retrieve the original file name from the uploaded file
         $originalFileName = $file->getClientOriginalName();
 
-        // Create and associate the attachment record
         return $model->attachOne($fieldName)->create([
-            'path' => $relativePath, // Store the relative path (e.g., news/images/<file>)
+            'path' => $relativePath,
             'file_name' => $originalFileName,
-            'disk_name' => $fileName, // Unique file name
+            'disk_name' => $fileName,
             'field' => $fieldName,
-            'attachment_type' => $file->getMimeType() ?? 'unknown', // Detect type dynamically
+            'attachment_type' => $file->getMimeType() ?? 'unknown',
             'file_size' => $file->getSize(),
             'content_type' => $file->getMimeType(),
         ]);
@@ -53,7 +48,7 @@ class AttachmentService
      * @param string|null $directory
      * @return array
      */
-    public function attachMultipleFiles(Model $model, array $files, string $fieldName, string $directory = null)
+    public function attachMultipleFiles(Model $model, array $files, string $fieldName, string $directory = null): array
     {
         $attachments = [];
 
@@ -70,14 +65,13 @@ class AttachmentService
      * @param FileAttachment $attachment
      * @return bool
      */
-    public function deleteAttachment(FileAttachment $attachment)
+    public function deleteAttachment(FileAttachment $attachment): bool
     {
-        // Delete the file from storage
         Storage::disk('public')->delete($attachment->path);
 
-        // Delete the attachment record
         return $attachment->delete();
     }
+
 
     /**
      * Get the full URL of the attached file.
@@ -85,8 +79,8 @@ class AttachmentService
      * @param FileAttachment $attachment
      * @return string
      */
-    public function getFileUrl(FileAttachment $attachment)
+    public function getFileUrl(FileAttachment $attachment): string
     {
-        return Storage::url($attachment->path); // Use the relative path to generate the URL
+        return Storage::url($attachment->path);
     }
 }

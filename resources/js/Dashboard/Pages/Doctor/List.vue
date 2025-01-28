@@ -65,6 +65,7 @@ export default {
             },
             columns: [
                 { key: 'id', label: 'ID', width: '15%' },
+                { key: 'image', label: 'Image', width: '15%', showImage: true },
                 { key: 'full_name', label: 'Full Name', width: '30%' },
                 { key: 'position', label: 'Position', width: '30%' }
             ],

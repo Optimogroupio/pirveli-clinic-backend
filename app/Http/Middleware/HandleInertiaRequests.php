@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\DashboardUser;
 use App\Models\Locale;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;

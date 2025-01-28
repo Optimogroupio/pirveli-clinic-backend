@@ -21,7 +21,7 @@ class DashboardLanguageService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedLanguages(array $filters, int $perPage = 10)
+    public function getPaginatedLanguages(array $filters, int $perPage = 10): mixed
     {
         return $this->languageRepository->query()
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
@@ -35,7 +35,7 @@ class DashboardLanguageService
      * @param array $data
      * @return mixed
      */
-    public function createLanguage(array $data)
+    public function createLanguage(array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -57,7 +57,7 @@ class DashboardLanguageService
      * @param mixed $data
      * @return mixed
      */
-    public function updateLanguage($id, mixed $data)
+    public function updateLanguage($id, mixed $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -80,7 +80,7 @@ class DashboardLanguageService
      * @param $id
      * @return mixed
      */
-    public function deleteLanguage($id)
+    public function deleteLanguage($id): mixed
     {
         try {
             DB::beginTransaction();

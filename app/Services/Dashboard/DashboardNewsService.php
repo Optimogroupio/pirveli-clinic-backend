@@ -2,8 +2,10 @@
 
 namespace App\Services\Dashboard;
 
+use App\Models\Page;
 use App\Repositories\NewsRepository;
 use App\Services\AttachmentService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -24,9 +26,10 @@ class DashboardNewsService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedNews(array $filters, int $perPage = 10)
+    public function getPaginatedNews(array $filters, int $perPage = 10): mixed
     {
         return $this->newsRepository->query()
+            ->with('image')
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
             ->orderBy($filters['sort_by'] ?? 'id', $filters['sort_direction'] ?? 'desc')
             ->paginate($perPage)
@@ -38,7 +41,7 @@ class DashboardNewsService
      * @param array $data
      * @return mixed
      */
-    public function createNews(array $data)
+    public function createNews(array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -70,15 +73,30 @@ class DashboardNewsService
      * @param mixed $data
      * @return mixed
      */
-    public function updateNews($id, mixed $data)
+    public function updateNews($id, mixed $data): mixed
     {
         try {
+
             DB::beginTransaction();
             $news = $this->newsRepository->find($id);
             $news->fill($data);
             $news->save();
 
-            $news->doctors()->sync($data['doctors']);
+            $doctors = $data['doctors'] ?? null;
+
+            if($doctors){
+                $news->doctors()->sync($data['doctors']);
+            }
+
+            $image = $data['image'] ?? null;
+            unset($data['image']);
+
+            if($image instanceof UploadedFile){
+                if($news->image){
+                    $this->attachmentService->deleteAttachment($news->image);
+                }
+                $this->attachmentService->attachFile($news, $image, 'image');
+            }
 
             DB::commit();
 
@@ -96,7 +114,7 @@ class DashboardNewsService
      * @param $id
      * @return mixed
      */
-    public function deleteNews($id)
+    public function deleteNews($id): mixed
     {
         try {
             DB::beginTransaction();

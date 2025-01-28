@@ -21,7 +21,7 @@ class DashboardPageService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedPages(array $filters, int $perPage = 10)
+    public function getPaginatedPages(array $filters, int $perPage = 10): mixed
     {
         return $this->pageRepository->query()
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
@@ -35,7 +35,7 @@ class DashboardPageService
      * @param array $data
      * @return mixed
      */
-    public function createPage(array $data)
+    public function createPage(array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -57,7 +57,7 @@ class DashboardPageService
      * @param mixed $data
      * @return mixed
      */
-    public function updateService($id, mixed $data)
+    public function updateService($id, mixed $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -80,7 +80,7 @@ class DashboardPageService
      * @param $id
      * @return mixed
      */
-    public function deletePage($id)
+    public function deletePage($id): mixed
     {
         try {
             DB::beginTransaction();

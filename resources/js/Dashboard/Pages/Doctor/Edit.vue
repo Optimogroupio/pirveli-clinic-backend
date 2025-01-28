@@ -9,12 +9,14 @@
                 { key: 'specialties', label: 'Specialty', type: 'multi-select', options: specialties, labelKey: 'name', valueKey: 'id', placeholder: 'Select specialty', size: 'inline'},
                 { key: 'service_id', label: 'Service', type: 'select', placeholder: 'Select service', options: services, valueKey: 'id', labelKey: 'name', size: 'inline'  },
                 { key: 'languages', label: 'Languages', type: 'multi-select', placeholder: 'Select languages', options: languages, valueKey: 'id', labelKey: 'name', size: 'inline'  },
+                { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'half' },
                 { key: 'meta_title', label: 'Meta Title', type: 'text', placeholder: 'Enter meta title', translatable: true, size: 'half' },
                 { key: 'meta_description', label: 'Meta Description', type: 'textarea', placeholder: 'Enter meta description', translatable: true, size: 'half' },
             ]"
             :initialData="{
                 full_name: doctor.full_name,
                 position: doctor.position,
+                image: doctor.image,
                 specialties: (doctor.specialties || []).map(specialty => specialty.id),
                 service_id: doctor.service_id,
                 languages: (doctor.languages || []).map(language => language.id),
@@ -149,7 +151,8 @@ export default {
             const filteredData = Object.fromEntries(
                 Object.entries(data).filter(([_, value]) => value !== null && value !== '')
             );
-            Inertia.patch(`/dashboard/doctors/${this.doctor.id}`, filteredData);
+            filteredData._method =  "put";
+            Inertia.post(`/dashboard/doctors/${this.doctor.id}`, filteredData);
         },
         createEducation() {
             Inertia.get(`/dashboard/doctors/${this.doctor.id}/doctor-details/educations/create`);

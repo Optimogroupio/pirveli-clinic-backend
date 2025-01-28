@@ -39,7 +39,8 @@
                                     <input type="checkbox" :value="row.id" v-model="selectedItems"/>
                                 </td>
                                 <td v-for="column in columns" :key="column.key" class="border-t px-6 py-4">
-                                    {{ formatColumnValue(row[column.key], column) }}
+                                    <img v-if="row[column.key]?.url" :src="row[column.key]?.url" :alt="row[column.key]?.file_name || 'Image'" class="w-24 h-24 rounded">
+                                    <span v-else>{{ formatColumnValue(row[column.key], column) }}</span>
                                 </td>
                                 <td v-if="hasActions" class="border-t px-6 py-4">
                                     <button v-if="canEdit" @click="$emit('edit', row.id)"
@@ -61,7 +62,8 @@
                             <input type="checkbox" :value="row.id" v-model="selectedItems"/>
                         </td>
                         <td v-for="column in columns" :key="column.key" class="border-t px-6 py-4">
-                            {{ formatColumnValue(row[column.key], column) }}
+                            <img v-if="row[column.key]?.url" :src="row[column.key]?.url" :alt="row[column.key]?.file_name || 'Image'" class="w-24 h-24 rounded">
+                            <span v-else>{{ formatColumnValue(row[column.key], column) }}</span>
                         </td>
                         <td v-if="hasActions" class="border-t px-6 py-4">
                             <button v-if="canEdit" @click="$emit('edit', row.id)"

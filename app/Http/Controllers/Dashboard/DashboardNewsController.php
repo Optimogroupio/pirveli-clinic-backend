@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Facades\Toast;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\News\DashboardStoreAppointmentRequest;
-use App\Http\Requests\News\DashboardUpdateAppointmentRequest;
+use App\Http\Requests\News\DashboardStoreNewsRequest;
+use App\Http\Requests\News\DashboardUpdateNewsRequest;
+use App\Http\Requests\Slider\DashboardUpdateSliderRequest;
 use App\Repositories\DoctorRepository;
 use App\Repositories\NewsRepository;
 use App\Repositories\ServiceRepository;
@@ -62,10 +63,10 @@ class DashboardNewsController extends Controller
 
     /**
      * Store method
-     * @param DashboardStoreAppointmentRequest $request
+     * @param DashboardStoreNewsRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(DashboardStoreAppointmentRequest $request)
+    public function store(DashboardStoreNewsRequest $request)
     {
         $this->newsService->createNews($request->validated());
 
@@ -85,7 +86,7 @@ class DashboardNewsController extends Controller
      */
     public function edit($id)
     {
-        $news = $this->newsRepository->find($id, ['translations', 'image']);
+        $news = $this->newsRepository->find($id, ['doctors','translations', 'image']);
         $services = $this->serviceRepository->all();
         $doctors = $this->doctorRepository->all();
 
@@ -98,11 +99,11 @@ class DashboardNewsController extends Controller
 
     /**
      * Update method
-     * @param DashboardUpdateAppointmentRequest $request
+     * @param DashboardUpdateNewsRequest $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(DashboardUpdateAppointmentRequest $request, $id)
+    public function update(DashboardUpdateNewsRequest $request, $id)
     {
         $this->newsService->updateNews($id, $request->validated());
 

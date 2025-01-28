@@ -21,7 +21,7 @@ class DashboardSpecialtyService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedSpecialties(array $filters, int $perPage = 10)
+    public function getPaginatedSpecialties(array $filters, int $perPage = 10): mixed
     {
         return $this->specialtyRepository->query()
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
@@ -35,7 +35,7 @@ class DashboardSpecialtyService
      * @param array $data
      * @return mixed
      */
-    public function createSpecialty(array $data)
+    public function createSpecialty(array $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -57,7 +57,7 @@ class DashboardSpecialtyService
      * @param mixed $data
      * @return mixed
      */
-    public function updateSpecialty($id, mixed $data)
+    public function updateSpecialty($id, mixed $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -80,7 +80,7 @@ class DashboardSpecialtyService
      * @param $id
      * @return mixed
      */
-    public function deleteSpecialty($id)
+    public function deleteSpecialty($id): mixed
     {
         try {
             DB::beginTransaction();

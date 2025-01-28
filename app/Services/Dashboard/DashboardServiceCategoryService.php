@@ -57,9 +57,8 @@ class DashboardServiceCategoryService
      * @param mixed $data
      * @return mixed
      */
-    public function updateServiceCategory($id, mixed $data)
+    public function updateServiceCategory($id, mixed $data): mixed
     {
-//        dd($data);
         try {
             DB::beginTransaction();
             $serviceCategory = $this->serviceCategoryRepository->find($id);
@@ -81,7 +80,7 @@ class DashboardServiceCategoryService
      * @param $id
      * @return mixed
      */
-    public function deleteServiceCategory($id)
+    public function deleteServiceCategory($id): mixed
     {
         try {
             DB::beginTransaction();

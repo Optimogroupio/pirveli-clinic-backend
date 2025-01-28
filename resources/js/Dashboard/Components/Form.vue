@@ -97,7 +97,6 @@
 
                 <!-- Single or Multiple File Input -->
                 <div v-if="field.type === 'file'" class="relative w-full">
-                    <!-- File Input -->
                     <input
                         type="file"
                         :id="field.key"
@@ -106,39 +105,43 @@
                         @change="handleFileChange($event, field)"
                         class="w-full cursor-pointer"
                     />
-
-                    <!-- File List -->
                     <div class="mt-2">
                         <ul class="space-y-1">
                             <!-- Show Initial Files -->
                             <li
                                 v-for="(file, index) in initialFiles[field.key]"
                                 :key="'initial-' + index"
-                                class="text-sm text-gray-700 flex items-center space-x-2"
+                                class="text-sm text-gray-700 flex flex-col items-start gap-3"
                             >
-                                <a
-                                    :href="file.url"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="underline text-blue-600 hover:text-blue-800"
-                                >
-                                    {{ file.name }}
-                                </a>
-                                <button
-                                    type="button"
-                                    @click="removeInitialFile(field.key, index)"
-                                    class="text-red-500 hover:text-red-700"
-                                >
-                                    Remove
-                                </button>
+                                <div v-if="isImage(file)" class="w-24 h-24">
+                                    <img :src="file.url" :alt="file.file_name" class="object-cover w-full h-full rounded">
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span>{{ file.file_name }}</span>
+                                    <button
+                                        type="button"
+                                        @click="removeInitialFile(field.key, index)"
+                                        class="hidden text-red-500 hover:text-red-700"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
                             </li>
-                            <!-- Show Newly Selected Files -->
                             <li
                                 v-for="(file, index) in selectedFiles[field.key]"
                                 :key="'new-' + index"
-                                class="text-sm text-gray-700 flex items-center space-x-2"
+                                class="text-sm text-gray-700 flex flex-col items-start gap-5 space-x-2"
                             >
-                                {{ file.name }}
+                                <div v-if="isImage(file)" class="w-24 h-24">
+                                    <img
+                                        v-if="file && typeof file === 'object' && file.name && file.type?.startsWith('image/')"
+                                        :src="getObjectURL(file)"
+                                        :alt="file.name || 'Uploaded file'"
+                                        class="object-cover w-full h-full rounded"
+                                    >
+                                    <span v-else class="text-red-500">Invalid File</span>
+                                </div>
+                                <span>{{ file.name }}</span>
                             </li>
                         </ul>
                     </div>
@@ -157,7 +160,7 @@
 </template>
 
 <script>
-import {computed, reactive, toRefs} from 'vue';
+import {computed, onMounted, reactive, toRefs} from 'vue';
 import {usePage} from '@inertiajs/vue3';
 import {Ckeditor} from '@ckeditor/ckeditor5-vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -186,60 +189,6 @@ export default {
         initialData: Object,
         submitLabel: String,
     },
-    created() {
-        this.fields.forEach(field => {
-            if (field.type === 'file' && this.initialData[field.key]) {
-                this.initialFiles[field.key] = Array.isArray(this.initialData[field.key])
-                    ? this.initialData[field.key]
-                    : [this.initialData[field.key]];
-            }
-        });
-    },
-    methods: {
-        handleFileChange(event, field) {
-            const files = Array.from(event.target.files);
-
-            if (field.multiple) {
-                // For multiple file input, append to existing selected files
-                this.selectedFiles[field.key] = this.selectedFiles[field.key]
-                    ? [...this.selectedFiles[field.key], ...files]
-                    : files;
-            } else {
-                // For single file input, replace the selected file
-                this.selectedFiles[field.key] = files;
-                this.initialFiles[field.key] = []; // Clear existing files
-            }
-        },
-        removeInitialFile(fieldKey, index) {
-            this.initialFiles[fieldKey].splice(index, 1);
-        },
-        handleSubmit(event) {
-            console.log("Form submit prevented!", event);
-            event.preventDefault();
-        },
-        handleSubmits() {
-            const formData = new FormData();
-
-            // Append other form fields
-            this.fields.forEach(field => {
-                if (field.type !== 'file') {
-                    formData.append(field.key, this.formData[field.key] || '');
-                }
-            });
-
-            // Append only newly selected files for file fields
-            Object.keys(this.selectedFiles).forEach(fieldKey => {
-                if (this.selectedFiles[fieldKey]?.length > 0) {
-                    this.selectedFiles[fieldKey].forEach(file => {
-                        formData.append(fieldKey, file);
-                    });
-                }
-            });
-
-            // Emit the FormData to the parent or make a direct API call
-            this.$emit('submit', formData);
-        },
-    },
     emits: ['submit'],
     setup(props, {emit}) {
         const {locales} = usePage().props;
@@ -251,6 +200,24 @@ export default {
                 return acc;
             }, {})
         );
+
+        const isImage = (file) => {
+            const imageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            return file && imageTypes.includes(file.type || file.content_type);
+        };
+
+        const getObjectURL = (file) => {
+            if (file && typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
+                return URL.createObjectURL(file);
+            }
+            return '';
+        };
+
+        const revokeObjectURL = (file) => {
+            if (file) {
+                URL.revokeObjectURL(file);
+            }
+        }
 
         const translatedData = reactive(
             locales.reduce((acc, locale) => {
@@ -290,9 +257,45 @@ export default {
         const activeLocales = reactive({});
         const dropdowns = reactive({});
 
+        const selectedFiles = reactive({});
+        const initialFiles = reactive({});
+
         props.fields.forEach(field => {
             activeLocales[field.key] = defaultLocale.value;
+            if (field.type === 'file' && props.initialData[field.key]) {
+                initialFiles[field.key] = Array.isArray(props.initialData[field.key])
+                    ? props.initialData[field.key]
+                    : [props.initialData[field.key]];
+            }
         });
+
+        onMounted(() => {
+            props.fields.forEach(field => {
+                if (field.type === 'file' && props.initialData[field.key]) {
+                    initialFiles[field.key] = Array.isArray(props.initialData[field.key])
+                        ? props.initialData[field.key]
+                        : [props.initialData[field.key]];
+                }
+                activeLocales[field.key] = defaultLocale.value;
+            });
+        });
+
+        const handleFileChange = (event, field) => {
+            const files = Array.from(event.target.files);
+
+            if (field.multiple) {
+                selectedFiles[field.key] = selectedFiles[field.key]
+                    ? [...selectedFiles[field.key], ...files]
+                    : files;
+            } else {
+                selectedFiles[field.key] = files;
+                initialFiles[field.key] = [];
+            }
+        };
+
+        const removeInitialFile = (fieldKey, index) => {
+            initialFiles[fieldKey].splice(index, 1);
+        };
 
         const errors = computed(() => usePage().props.errors || {});
 
@@ -301,6 +304,12 @@ export default {
             if (formData.to_this_day === "" || formData.to_this_day === null) {
                 formData.to_this_day = 0;
             }
+
+            props.fields.forEach(field => {
+                if (field.type !== 'file') {
+                    formData[field.key] = formData[field.key] || '';
+                }
+            });
 
             const translatedFields = {};
 
@@ -313,6 +322,14 @@ export default {
                 });
             });
 
+            Object.keys(selectedFiles).forEach(fieldKey => {
+                if (selectedFiles[fieldKey]?.length > 0) {
+                    selectedFiles[fieldKey].forEach(file => {
+                        formData[fieldKey] = file;
+                    });
+                }
+            });
+
             emit('submit', {...formData, Translatable: translatedFields});
         };
 
@@ -320,10 +337,10 @@ export default {
 
         const getFieldModelValue = key => {
             const locale = activeLocales[key];
-            if (!locale) return ''; // Default to empty if locale is undefined
+            if (!locale) return '';
             return locale === defaultLocale.value
                 ? formData[key]
-                : translatedData[locale]?.[key] || ''; // Fallback to empty string if value is missing
+                : translatedData[locale]?.[key] || '';
         };
 
         const setFieldModelValue = (key, value) => {
@@ -386,8 +403,8 @@ export default {
 
         const fieldClass = size => {
             if (size === 'full') return 'w-full';
-            if (size === 'inline') return 'flex-1'; // Flex to take equal space in line
-            return 'w-1/2'; // Default half-width
+            if (size === 'inline') return 'flex-1';
+            return 'w-1/2';
         };
 
         const groupClass = group => {
@@ -416,7 +433,14 @@ export default {
             fieldClass,
             groupClass,
             getTransformedOptions,
-            getFlatpickrConfig
+            getFlatpickrConfig,
+            handleFileChange,
+            removeInitialFile,
+            isImage,
+            initialFiles,
+            selectedFiles,
+            getObjectURL,
+            revokeObjectURL
         };
     }
 };

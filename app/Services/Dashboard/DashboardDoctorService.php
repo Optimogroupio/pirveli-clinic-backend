@@ -4,6 +4,8 @@ namespace App\Services\Dashboard;
 
 use App\Repositories\DoctorDetailRepository;
 use App\Repositories\DoctorRepository;
+use App\Services\AttachmentService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -11,11 +13,13 @@ class DashboardDoctorService
 {
     protected $doctorRepository;
     protected $doctorDetailRepository;
+    protected $attachmentService;
 
-    public function __construct(DoctorRepository $doctorRepository, DoctorDetailRepository $doctorDetailRepository)
+    public function __construct(DoctorRepository $doctorRepository, DoctorDetailRepository $doctorDetailRepository, AttachmentService $attachmentService)
     {
         $this->doctorRepository = $doctorRepository;
         $this->doctorDetailRepository = $doctorDetailRepository;
+        $this->attachmentService = $attachmentService;
     }
 
     /**
@@ -24,9 +28,10 @@ class DashboardDoctorService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedDoctors(array $filters, int $perPage = 10)
+    public function getPaginatedDoctors(array $filters, int $perPage = 10): mixed
     {
         return $this->doctorRepository->query()
+            ->with('image')
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('full_name', 'like', "%$search%"))
             ->orderBy($filters['sort_by'] ?? 'id', $filters['sort_direction'] ?? 'desc')
             ->paginate($perPage)
@@ -38,13 +43,21 @@ class DashboardDoctorService
      * @param array $data
      * @return mixed
      */
-    public function createDoctor(array $data)
+    public function createDoctor(array $data): mixed
     {
         try {
             DB::beginTransaction();
             $model = $this->doctorRepository->create($data);
             $model->specialties()->sync($data['specialties']);
             $model->languages()->sync($data['languages']);
+
+            $file = $data['image'] ?? null;
+            unset($data['image']);
+
+            if ($file) {
+                $this->attachmentService->attachFile($model, $file, 'image');
+            }
+
             DB::commit();
 
             return $model;
@@ -62,7 +75,7 @@ class DashboardDoctorService
      * @param mixed $data
      * @return mixed
      */
-    public function updateDoctor($id, mixed $data)
+    public function updateDoctor($id, mixed $data): mixed
     {
         try {
             DB::beginTransaction();
@@ -72,6 +85,16 @@ class DashboardDoctorService
 
             $doctor->specialties()->sync($data['specialties']);
             $doctor->languages()->sync($data['languages']);
+
+            $image = $data['image'] ?? null;
+            unset($data['image']);
+
+            if($image instanceof UploadedFile){
+                if($doctor->image){
+                    $this->attachmentService->deleteAttachment($doctor->image);
+                }
+                $this->attachmentService->attachFile($doctor, $image, 'image');
+            }
 
             DB::commit();
 
@@ -89,7 +112,7 @@ class DashboardDoctorService
      * @param $id
      * @return mixed
      */
-    public function deleteDoctor($id)
+    public function deleteDoctor($id): mixed
     {
         try {
             DB::beginTransaction();
@@ -110,7 +133,7 @@ class DashboardDoctorService
      * @param array $data
      * @return mixed
      */
-    public function createDoctorDetail(array $data)
+    public function createDoctorDetail(array $data): mixed
     {
         try {
             $model = $this->doctorDetailRepository->create($data);
@@ -131,7 +154,7 @@ class DashboardDoctorService
      * @param int $id
      * @return mixed
      */
-    public function updateDoctorDetail(array $data, int $id)
+    public function updateDoctorDetail(array $data, int $id): mixed
     {
         try {
             DB::beginTransaction();
@@ -154,7 +177,7 @@ class DashboardDoctorService
      * @param int $id
      * @return mixed
      */
-    public function deleteDoctorDetail(int $id)
+    public function deleteDoctorDetail(int $id): mixed
     {
         try {
             DB::beginTransaction();

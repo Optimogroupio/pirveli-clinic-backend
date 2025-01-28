@@ -25,7 +25,7 @@ class DashboardAdminService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedPermissions(array $filters, int $perPage = 10)
+    public function getPaginatedPermissions(array $filters, int $perPage = 10): mixed
     {
         return $this->adminRepository->query()
             ->when($filters['search'] ?? null, function ($query, $search) {
@@ -46,7 +46,7 @@ class DashboardAdminService
      * @param array $data
      * @return mixed
      */
-    public function createAdmin(array $data)
+    public function createAdmin(array $data): mixed
     {
         DB::beginTransaction();
 
@@ -116,7 +116,7 @@ class DashboardAdminService
      * @param $id
      * @return mixed
      */
-    public function deleteAdmin($id)
+    public function deleteAdmin($id): mixed
     {
         try {
             DB::beginTransaction();

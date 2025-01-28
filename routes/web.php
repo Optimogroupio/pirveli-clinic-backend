@@ -13,6 +13,8 @@ use App\Http\Controllers\Dashboard\DashboardPermissionsController;
 use App\Http\Controllers\Dashboard\DashboardRolesController;
 use App\Http\Controllers\Dashboard\DashboardServiceCategoryController;
 use App\Http\Controllers\Dashboard\DashboardServiceController;
+use App\Http\Controllers\Dashboard\DashboardSettingsController;
+use App\Http\Controllers\Dashboard\DashboardSliderController;
 use App\Http\Controllers\Dashboard\DashboardSpecialtyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -117,6 +119,13 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
             // News
             Route::resource('news', DashboardNewsController::class)->except('show');
+
+            // Slider
+            Route::resource('slider', DashboardSliderController::class)->except('show');
+            Route::post('/slider/update-order', [DashboardSliderController::class, 'updateOrder'])->name('slider.reorder');
+
+            // Settings
+            Route::resource('settings', DashboardSettingsController::class)->except('show');
 
         });
 
