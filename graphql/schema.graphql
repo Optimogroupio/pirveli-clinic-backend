@@ -55,6 +55,8 @@ type Query {
 
     settings(locale: String!): [Settings!]! @all @setLocale
 
+    slider(locale: String!): [Slider!]! @all @setLocale
+
 
 
 }
@@ -250,6 +252,17 @@ type Settings{
     value: String
     banner_image: FileAttachment @morphOne
     logo: FileAttachment @morphOne
+    translations: [Translation] @morphMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+"Slider "
+type Slider{
+    id: ID!
+    title: String!
+    description: String!
+    image: FileAttachment @morphOne
     translations: [Translation] @morphMany
     created_at: DateTime!
     updated_at: DateTime!
