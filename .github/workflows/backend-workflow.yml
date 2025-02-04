@@ -1,0 +1,22 @@
+name: Prod optimobet.com Release Workflow
+
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  build:
+    runs-on: vita-runner 
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: moving files to destination
+        run:  sudo rsync -r --verbose --exclude '.git*' ./ /var/www/backend-clinic
+
+      - name: permission checkpoint
+        run:  sudo chown -R www-data:www-data /var/www
+
+      - name: restarting nginx
+        run: sudo systemctl restart nginx
