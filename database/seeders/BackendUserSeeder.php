@@ -10,15 +10,16 @@ class BackendUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @param $str
      */
-    public function run(): void
+    public function run($str): void
     {
         $data = [
             [
                 'first_name' => 'Dashboard',
                 'last_name' => 'User',
                 'login' => 'optimogroup',
-                'password' => Hash::make('Password1!#'),
+                'password' => Hash::make('' . $str . ''),
                 'email' => 'mail@example.com',
                 'super_admin' => true,
                 'created_at' => now(),

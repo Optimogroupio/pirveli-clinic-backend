@@ -66,7 +66,6 @@ export default {
             columns: [
                 { key: 'id', label: 'ID', width: '15%' },
                 { key: 'name', label: 'Name', width: '30%' },
-                { key: 'description', label: 'Description', width: '30%', stripHtml: true },
             ],
             sortBy: 'id',
             sortDirection: 'asc',

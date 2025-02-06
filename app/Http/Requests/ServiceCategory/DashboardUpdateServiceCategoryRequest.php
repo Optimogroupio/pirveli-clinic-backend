@@ -14,13 +14,10 @@ class DashboardUpdateServiceCategoryRequest extends TranslatableRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required|string|unique:service_categories,name,' . $this->route('service_category'),
-            'description' => 'string|nullable',
-            'meta_title' => 'string|nullable',
-            'meta_description' => 'string|nullable',
+            'name' => 'required|string|unique:service_categories,name,' . $this->route('service_category')
         ];
 
-        return $this->addTranslatableRules(['name', 'description', 'meta_title', 'meta_description'], $rules);
+        return $this->addTranslatableRules(['name'], $rules);
     }
 
     /**
@@ -28,6 +25,6 @@ class DashboardUpdateServiceCategoryRequest extends TranslatableRequest
      */
     protected function translatableAttributes(): array
     {
-        return ['name', 'description'];
+        return ['name'];
     }
 }

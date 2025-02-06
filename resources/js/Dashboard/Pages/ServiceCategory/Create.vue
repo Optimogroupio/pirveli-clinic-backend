@@ -5,9 +5,6 @@
         <Form
             :fields="[
                 { key: 'name', label: 'Name', type: 'text', placeholder: 'Enter name', translatable: true, size: 'half' },
-                { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', translatable: true, size: 'full'},
-                { key: 'meta_title', label: 'Meta Title', type: 'text', placeholder: 'Enter meta title', translatable: true},
-                { key: 'meta_description', label: 'Meta Description', type: 'textarea', placeholder: 'Enter meta description', translatable: true},
             ]"
             :initialData="{ name: '', description: '' }"
             submitLabel="Create"

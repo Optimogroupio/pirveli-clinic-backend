@@ -14,12 +14,9 @@ class DashboardStoreServiceCategoryRequest extends TranslatableRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required|string|unique:service_categories,name',
-            'description' => 'string|nullable',
-            'meta_title' => 'string|nullable',
-            'meta_description' => 'string|nullable',
+            'name' => 'required|string|unique:service_categories,name'
         ];
 
-        return $this->addTranslatableRules(['name', 'description', 'meta_title', 'meta_description'], $rules);
+        return $this->addTranslatableRules(['name'], $rules);
     }
 }

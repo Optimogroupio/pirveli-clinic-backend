@@ -22,10 +22,9 @@ class ServiceCategory extends Model
     protected $fillable = [
         'name',
         'slug',
-        'description'
     ];
 
-    public $translatableAttributes = ['name', 'description'];
+    public $translatableAttributes = ['name'];
 
     public function services(){
         return $this->hasMany(Service::class);
