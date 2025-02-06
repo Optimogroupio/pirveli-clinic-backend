@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: moving files to destination
-        run:  sudo rsync -r --verbose --exclude '.git*' ./ /var/www/backend-clinic
+        run:  sudo rsync -r --verbose --delete --exclude '.git*' ./ /var/www/backend-clinic
 
       - name: permission checkpoint
         run:  sudo chown -R www-data:www-data /var/www
