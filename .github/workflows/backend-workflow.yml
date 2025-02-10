@@ -16,7 +16,7 @@ jobs:
         run: |
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
-          eval "echo \"${{ vars.ENV }}\"" | tr ';' '\n' > .env
+          eval "echo \"${{ vars.ENV }}\"" | tr ';' '\n' | sed 's/\r$//' > .env 
           composer install -n
           npm install
           npm run build
