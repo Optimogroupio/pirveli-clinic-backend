@@ -20,6 +20,7 @@ jobs:
           composer install -n
           npm install
           npm run build
+          php artisan storage:link
 
       - name: moving files to destination
         run:  sudo rsync -r --verbose --delete --exclude '.git*' ./ /var/www/backend-clinic
