@@ -12,22 +12,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: moving files to destination
+        run:  sudo rsync -r --verbose --exclude '.git*' ./ /var/www/backend-clinic && sudo chown -R runner:runner /var/www
+
       - name: installing composer
         run: |
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
-          eval "echo \"${{ vars.ENV }}\"" | tr ';' '\n' | sed 's/\r$//' > .env 
-          composer install -n
-          npm install
-          npm run build
-          php artisan storage:link
-
-      - name: moving files to destination
-        run:  sudo rsync -r --verbose --delete --exclude '.git*' ./ /var/www/backend-clinic
+          eval "echo \"${{ vars.ENV }}\"" | tr ';' '\n' | sed 's/\r$//' > /var/www/backend-clinic/.env 
+          cd /var/www/backend-clinic && composer install -n
+          cd /var/www/backend-clinic && npm install
+          cd /var/www/backend-clinic && npm run build
+          cd /var/www/backend-clinic && php artisan storage:link
 
       - name: permission checkpoint
         run:  sudo chown -R www-data:www-data /var/www
 
       - name: restarting nginx
         run: sudo systemctl restart nginx
-
