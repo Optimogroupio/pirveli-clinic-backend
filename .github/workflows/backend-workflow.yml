@@ -12,6 +12,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: installing composer
+        run: |
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
+          eval "echo \"${{ vars.ENV }}\"" | tr ';' '\n' > .env
+          composer install -n
+          npm install
+          npm run build
+
       - name: moving files to destination
         run:  sudo rsync -r --verbose --delete --exclude '.git*' ./ /var/www/backend-clinic
 
