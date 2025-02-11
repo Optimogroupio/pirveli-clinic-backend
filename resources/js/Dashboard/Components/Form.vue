@@ -301,10 +301,6 @@ export default {
 
         const handleSubmit = () => {
 
-            if (formData["to_this_day"] === "" || formData["to_this_day"] === null) {
-                formData["to_this_day"] = 0;
-            }
-
             props.fields.forEach(field => {
                 if (field.type !== 'file') {
                     formData[field.key] = formData[field.key] || '';
@@ -329,6 +325,10 @@ export default {
                     });
                 }
             });
+
+            if (formData["to_this_day"] === "" || formData["to_this_day"] === null) {
+                formData["to_this_day"] = 0;
+            }
 
             emit('submit', {...formData, Translatable: translatedFields});
         };
