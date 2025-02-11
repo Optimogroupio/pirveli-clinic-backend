@@ -5,7 +5,7 @@
         <Form
             :fields="[
                 { key: 'name', label: 'Name', type: 'text', placeholder: 'Enter name', translatable: true },
-                { key: 'short_description', label: 'Description', type: 'textarea', placeholder: 'Enter short description', size: 'full', translatable: true },
+                { key: 'short_description', label: 'Short Description', type: 'textarea', placeholder: 'Enter short description', size: 'full', translatable: true },
                 { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', size: 'full', translatable: true },
                 { key: 'svg', label: 'SVG', type: 'textarea', placeholder: 'Enter svg', size: 'full', translatable: false },
                 { key: 'service_category_id', label: 'Service category', type: 'select', options: service_categories, labelKey: 'name', valueKey: 'id', placeholder: 'Select service category' },
