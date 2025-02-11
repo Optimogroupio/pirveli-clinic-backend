@@ -171,7 +171,7 @@ class DashboardDoctorController extends Controller
      */
     public function storeDoctorDetail(DashboardStoreDoctorDetailRequest $request, $doctorId, $type)
     {
-        if (!in_array($type, ['educations', 'experiences', 'certifications'])) {
+        if (!in_array($type, ['educations', 'experiences', 'certificates'])) {
             abort(404, 'Invalid detail type');
         }
 

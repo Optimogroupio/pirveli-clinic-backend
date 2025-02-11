@@ -6,6 +6,7 @@
             :fields="[
                 { key: 'name', label: 'Name', type: 'text', placeholder: 'Enter name', translatable: true},
                 { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', translatable: true, size: 'full'},
+                { key: 'description', label: 'Description', type: 'textarea', placeholder: 'Enter short description', size: 'full', translatable: true },
                 { key: 'svg', label: 'SVG', type: 'textarea', placeholder: 'Enter svg', size: 'full', translatable: false },
                 { key: 'service_category_id', label: 'Service category', type: 'select', options: service_categories, labelKey: 'name', valueKey: 'id', placeholder: 'Select service category' },
                 { key: 'meta_title', label: 'Meta Title', type: 'text', placeholder: 'Enter meta title', translatable: true},

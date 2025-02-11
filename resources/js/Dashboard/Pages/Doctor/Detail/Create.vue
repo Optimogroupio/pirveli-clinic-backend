@@ -12,7 +12,7 @@
                 { key: 'end_date', label: 'End date', type: 'flatpickr', placeholder: 'Choose end date', size: 'inline', dateFormat: 'Y-m' },
                 { key: 'to_this_day', label: 'To this day', type: 'toggle', fullWidth: true }
             ]"
-            :initialData="{ doctor_id: doctor.id, type: type, name: '', title: '', start_date: '', end_date: '', to_this_day: 0 }"
+            :initialData="{ doctor_id: doctor.id, type: type, name: '', title: '', start_date: '', end_date: '', to_this_day: false }"
             submitLabel="Create"
             @submit="handleCreate"
         />

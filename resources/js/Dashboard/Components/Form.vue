@@ -1,4 +1,4 @@
-``` <template>
+<template>
     <form @submit.prevent="handleSubmit" class="space-y-4">
         <div
             v-for="fieldGroup in groupedFields"
@@ -301,8 +301,8 @@ export default {
 
         const handleSubmit = () => {
 
-            if (formData.to_this_day === "" || formData.to_this_day === null) {
-                formData.to_this_day = 0;
+            if (formData["to_this_day"] === "" || formData["to_this_day"] === null) {
+                formData["to_this_day"] = 0;
             }
 
             props.fields.forEach(field => {
