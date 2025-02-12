@@ -330,6 +330,11 @@ export default {
                 formData["to_this_day"] = 0;
             }
 
+            if (formData["is_default"] === "" || formData["is_default"] === null) {
+                formData["is_default"] = 0;
+            }
+
+
             emit('submit', {...formData, Translatable: translatedFields});
         };
 

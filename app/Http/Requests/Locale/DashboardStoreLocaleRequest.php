@@ -16,7 +16,7 @@ class DashboardStoreLocaleRequest extends FormRequest
         return [
             'name' => 'required|string|unique:locales,name',
             'code' => 'required|string',
-            'default' => 'required|boolean',
+            'is_default' => 'required|boolean',
         ];
     }
 
