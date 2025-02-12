@@ -7,6 +7,7 @@
                 { key: 'name', label: 'Name', type: 'text', placeholder: 'Enter name', translatable: true},
                 { key: 'short_description', label: 'Short Description', type: 'textarea', placeholder: 'Enter short description', size: 'full', translatable: true },
                 { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', translatable: true, size: 'full'},
+                { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'half' },
                 { key: 'svg', label: 'SVG', type: 'textarea', placeholder: 'Enter svg', size: 'full', translatable: false },
                 { key: 'service_category_id', label: 'Service category', type: 'select', options: service_categories, labelKey: 'name', valueKey: 'id', placeholder: 'Select service category' },
                 { key: 'meta_title', label: 'Meta Title', type: 'text', placeholder: 'Enter meta title', translatable: true},
@@ -37,7 +38,8 @@ export default {
         const service = props.service;
 
         const handleUpdate = (data) => {
-            Inertia.patch(`/dashboard/services/${service.id}`, data);
+            data._method = "put";
+            Inertia.post(`/dashboard/services/${service.id}`, data);
         };
 
         return {

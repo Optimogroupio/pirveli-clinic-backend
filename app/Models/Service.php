@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasAttachments;
 use App\Traits\Translatable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
-    use Sluggable, Translatable;
+    use Sluggable, Translatable, HasAttachments;
 
     public function sluggable(): array
     {
@@ -45,6 +46,11 @@ class Service extends Model
     public function news()
     {
         return $this->hasMany(News::class);
+    }
+
+    public function image()
+    {
+        return $this->attachOne('image');
     }
 
 }

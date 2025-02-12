@@ -17,6 +17,7 @@ class DashboardUpdateServiceRequest extends TranslatableRequest
             'name' => 'required|string|unique:service_categories,name,' . $this->route('service_category'),
             'short_description' => 'required|string',
             'description' => 'string|nullable',
+            'image' => 'file_attachment',
             'svg' => 'string|nullable',
             'service_category_id' => 'required|exists:service_categories,id',
             'meta_title' => 'string|nullable',

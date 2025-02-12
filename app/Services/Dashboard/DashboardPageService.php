@@ -3,16 +3,20 @@
 namespace App\Services\Dashboard;
 
 use App\Repositories\PageRepository;
+use App\Services\AttachmentService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DashboardPageService
 {
     protected $pageRepository;
+    protected $attachmentService;
 
-    public function __construct(PageRepository $pageRepository)
+    public function __construct(PageRepository $pageRepository, AttachmentService $attachmentService)
     {
         $this->pageRepository = $pageRepository;
+        $this->attachmentService = $attachmentService;
     }
 
     /**
@@ -24,6 +28,7 @@ class DashboardPageService
     public function getPaginatedPages(array $filters, int $perPage = 10): mixed
     {
         return $this->pageRepository->query()
+            ->with('image')
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
             ->orderBy($filters['sort_by'] ?? 'id', $filters['sort_direction'] ?? 'desc')
             ->paginate($perPage)
@@ -40,6 +45,14 @@ class DashboardPageService
         try {
             DB::beginTransaction();
             $model = $this->pageRepository->create($data);
+
+            $file = $data['image'] ?? null;
+            unset($data['image']);
+
+            if ($file) {
+                $this->attachmentService->attachFile($model, $file, 'image');
+            }
+
             DB::commit();
 
             return $model;
@@ -61,9 +74,20 @@ class DashboardPageService
     {
         try {
             DB::beginTransaction();
-            $service = $this->pageRepository->find($id);
-            $service->fill($data);
-            $service->save();
+            $page = $this->pageRepository->find($id);
+            $page->fill($data);
+            $page->save();
+
+            $image = $data['image'] ?? null;
+            unset($data['image']);
+
+            if($image instanceof UploadedFile){
+                if($page->image){
+                    $this->attachmentService->deleteAttachment($page->image);
+                }
+                $this->attachmentService->attachFile($page, $image, 'image');
+            }
+
             DB::commit();
 
             return $service;

@@ -3,16 +3,20 @@
 namespace App\Services\Dashboard;
 
 use App\Repositories\ServiceRepository;
+use App\Services\AttachmentService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DashboardServiceService
 {
     protected $serviceRepository;
+    protected $attachmentService;
 
-    public function __construct(ServiceRepository $serviceRepository)
+    public function __construct(ServiceRepository $serviceRepository, AttachmentService $attachmentService)
     {
         $this->serviceRepository = $serviceRepository;
+        $this->attachmentService = $attachmentService;
     }
 
     /**
@@ -24,6 +28,7 @@ class DashboardServiceService
     public function getPaginatedServices(array $filters, int $perPage = 10): mixed
     {
         return $this->serviceRepository->query()
+            ->with('image')
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
             ->orderBy($filters['sort_by'] ?? 'id', $filters['sort_direction'] ?? 'desc')
             ->paginate($perPage)
@@ -40,6 +45,14 @@ class DashboardServiceService
         try {
             DB::beginTransaction();
             $model = $this->serviceRepository->create($data);
+
+            $file = $data['image'] ?? null;
+            unset($data['image']);
+
+            if ($file) {
+                $this->attachmentService->attachFile($model, $file, 'image');
+            }
+
             DB::commit();
 
             return $model;
@@ -64,6 +77,17 @@ class DashboardServiceService
             $service = $this->serviceRepository->find($id);
             $service->fill($data);
             $service->save();
+
+            $image = $data['image'] ?? null;
+            unset($data['image']);
+
+            if($image instanceof UploadedFile){
+                if($service->image){
+                    $this->attachmentService->deleteAttachment($service->image);
+                }
+                $this->attachmentService->attachFile($service, $image, 'image');
+            }
+
             DB::commit();
 
             return $service;

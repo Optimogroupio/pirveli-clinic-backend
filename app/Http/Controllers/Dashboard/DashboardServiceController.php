@@ -76,7 +76,7 @@ class DashboardServiceController extends Controller
      */
     public function edit($id)
     {
-        $service = $this->serviceRepository->find($id, ['translations']);
+        $service = $this->serviceRepository->find($id, ['image', 'translations']);
         $service_categories = $this->serviceCategoryRepository->all();
 
         return inertia('Service/Edit', [

@@ -103,6 +103,7 @@ type Service{
     slug: String
     short_description: String
     description: String!
+    image: FileAttachment
     svg: String
     service_category: ServiceCategory @belongsTo
     doctors: [Doctor] @hasMany
@@ -119,6 +120,7 @@ type Page{
     name: String!
     slug: String!
     description: String!
+    image: FileAttachment
     meta_title: String
     meta_description: String
     translations: [Translation] @morphMany

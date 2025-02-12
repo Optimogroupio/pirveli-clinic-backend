@@ -17,6 +17,7 @@ class DashboardStoreServiceRequest extends TranslatableRequest
             'name' => 'required|string|unique:service_categories,name',
             'short_description' => 'required|string',
             'description' => 'string|nullable',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'svg' => 'string|nullable',
             'service_category_id' => 'required|exists:service_categories,id',
             'meta_title' => 'string|nullable',

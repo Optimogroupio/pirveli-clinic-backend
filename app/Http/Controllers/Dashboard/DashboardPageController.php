@@ -73,7 +73,7 @@ class DashboardPageController extends Controller
      */
     public function edit($id)
     {
-        $page = $this->pageRepository->find($id, ['translations']);
+        $page = $this->pageRepository->find($id, ['image','translations']);
 
         return inertia('Page/Edit', [
             'page' => $page,

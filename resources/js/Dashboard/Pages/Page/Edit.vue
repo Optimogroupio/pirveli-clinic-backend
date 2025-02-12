@@ -6,6 +6,7 @@
             :fields="[
                 { key: 'name', label: 'Name', type: 'text', placeholder: 'Enter name', translatable: true},
                 { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', translatable: true, size: 'full'},
+                { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'half' },
                 { key: 'meta_title', label: 'Meta Title', type: 'text', placeholder: 'Enter meta title', translatable: true},
                 { key: 'meta_description', label: 'Meta Description', type: 'textarea', placeholder: 'Enter meta description', translatable: true},
             ]"
@@ -31,7 +32,8 @@ export default {
         const page = props.page;
 
         const handleUpdate = (data) => {
-            Inertia.patch(`/dashboard/pages/${page.id}`, data);
+            data._method = "put";
+            Inertia.post(`/dashboard/pages/${page.id}`, data);
         };
 
         return {

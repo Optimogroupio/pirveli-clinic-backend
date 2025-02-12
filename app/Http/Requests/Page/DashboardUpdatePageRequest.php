@@ -16,6 +16,7 @@ class DashboardUpdatePageRequest extends TranslatableRequest
         $rules = [
             'name' => 'required|string|unique:pages,name,' . $this->route('page'),
             'description' => 'string|nullable',
+            'image' => 'file_attachment',
             'meta_title' => 'string|nullable',
             'meta_description' => 'string|nullable',
         ];
