@@ -25,7 +25,6 @@ class Service extends Model
         'slug',
         'short_description',
         'description',
-        'svg',
         'service_category_id',
         'meta_title',
         'meta_description'

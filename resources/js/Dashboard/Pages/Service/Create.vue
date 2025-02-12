@@ -8,7 +8,6 @@
                 { key: 'short_description', label: 'Short Description', type: 'textarea', placeholder: 'Enter short description', size: 'full', translatable: true },
                 { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', size: 'full', translatable: true },
                 { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'half' },
-                { key: 'svg', label: 'SVG', type: 'textarea', placeholder: 'Enter svg', size: 'full', translatable: false },
                 { key: 'service_category_id', label: 'Service category', type: 'select', options: service_categories, labelKey: 'name', valueKey: 'id', placeholder: 'Select service category' },
                 { key: 'meta_title', label: 'Meta Title', type: 'text', placeholder: 'Enter meta title', translatable: true, size: 'half' },
                 { key: 'meta_description', label: 'Meta Description', type: 'textarea', placeholder: 'Enter meta description', translatable: true, size: 'half' },
