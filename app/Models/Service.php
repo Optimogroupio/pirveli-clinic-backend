@@ -22,6 +22,7 @@ class Service extends Model
     protected $fillable = [
         'name',
         'slug',
+        'short_description',
         'description',
         'svg',
         'service_category_id',
@@ -29,7 +30,7 @@ class Service extends Model
         'meta_description'
     ];
 
-    public $translatableAttributes = ['name', 'description', 'meta_title', 'meta_description'];
+    public $translatableAttributes = ['name', 'description', 'description', 'meta_title', 'meta_description'];
 
     public function service_category()
     {

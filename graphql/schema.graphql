@@ -101,6 +101,7 @@ type Service{
     id: ID!
     name: String!
     slug: String
+    short_description: String
     description: String!
     svg: String
     service_category: ServiceCategory @belongsTo
