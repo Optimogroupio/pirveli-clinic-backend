@@ -46,13 +46,6 @@ class DashboardPageService
             DB::beginTransaction();
             $model = $this->pageRepository->create($data);
 
-            $file = $data['image'] ?? null;
-            unset($data['image']);
-
-            if ($file) {
-                $this->attachmentService->attachFile($model, $file, 'image');
-            }
-
             DB::commit();
 
             return $model;
@@ -78,19 +71,9 @@ class DashboardPageService
             $page->fill($data);
             $page->save();
 
-            $image = $data['image'] ?? null;
-            unset($data['image']);
-
-            if($image instanceof UploadedFile){
-                if($page->image){
-                    $this->attachmentService->deleteAttachment($page->image);
-                }
-                $this->attachmentService->attachFile($page, $image, 'image');
-            }
-
             DB::commit();
 
-            return $service;
+            return $page;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Failed to update page: ' . $e->getMessage());

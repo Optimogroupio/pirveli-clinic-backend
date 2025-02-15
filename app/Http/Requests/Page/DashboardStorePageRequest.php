@@ -16,7 +16,6 @@ class DashboardStorePageRequest extends TranslatableRequest
         $rules = [
             'name' => 'required|string|unique:pages,name',
             'description' => 'string|nullable',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'meta_title' => 'string|nullable',
             'meta_description' => 'string|nullable',
         ];
