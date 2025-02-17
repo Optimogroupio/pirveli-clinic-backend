@@ -25,15 +25,16 @@ class CreateAppointmentMutation
                 'phone' => $args['phone'],
             ]);
 
+
             return [
                 'success' => true,
-                'message' => 'Appointment created successfully!',
+                'message' => __('messages.booking.success'),
                 'appointment' => $appointment,
             ];
         } catch (\Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Failed to create appointment: ' . $e->getMessage(),
+                'message' => __('messages.booking.error'),
                 'appointment' => null,
             ];
         }
