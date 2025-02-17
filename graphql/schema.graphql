@@ -39,7 +39,9 @@ type Query {
         specialty_id: ID
         specialty_name: String
         locale: String!
-    ): [Doctor!]! @all @setLocale
+    ): [Doctor!]! @all(
+        builder: "App\\GraphQL\\Builders\\DoctorBuilder@filterDoctors"
+    )  @setLocale
 
     doctor(locale: String!, slug: String! @eq): Doctor @find @setLocale
 
