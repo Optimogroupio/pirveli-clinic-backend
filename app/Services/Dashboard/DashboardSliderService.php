@@ -83,7 +83,7 @@ class DashboardSliderService
 
             if($image && $image instanceof UploadedFile){
                 $this->attachmentService->deleteAttachment($slider->image);
-                $this->attachmentService->attachFile($slider, $data['image'], 'image');
+                $this->attachmentService->attachFile($slider, $image, 'image');
             }
 
             DB::commit();
