@@ -23,6 +23,7 @@ type Query {
 
     service(slug: String @eq, locale: String): Service @find @setLocale
     service_categories(locale: String): [ServiceCategory] @all @setLocale
+    single_service_category(id: ID @eq, locale: String): ServiceCategory @find @setLocale
 
     doctors(
         full_name: String
