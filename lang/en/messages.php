@@ -2,7 +2,7 @@
 
 return [
     'booking' => [
-        'success' => 'ვიზიტი წარმატებით დაიჯავშნა. დაელოდეთ, დაგიკავშირდებით.',
-        'error' => 'ვიზიტის დაჯავშნისას დაფიქსირდა შეცდომა',
+        'success' => 'The appointment has been successfully booked. Please wait, we will contact you.',
+        'error' => 'An error occurred while booking the appointment.',
     ]
 ];
