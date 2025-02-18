@@ -159,6 +159,7 @@ type FileAttachment{
     field: String!
     is_public: Boolean
     url: String
+    content: String
     created_at: DateTime!
     updated_at: DateTime!
 }

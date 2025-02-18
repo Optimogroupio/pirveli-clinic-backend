@@ -10,7 +10,7 @@ class FileAttachment extends Model
 {
     protected $fillable = ['file_name', 'disk_name', 'file_size', 'content_type', 'attachment_id', 'attachment_type', 'field', 'is_public'];
 
-    protected $appends = ['url'];
+    protected $appends = ['url', 'content'];
 
     /**
      * Get the full URL of the stored file.
@@ -28,6 +28,19 @@ class FileAttachment extends Model
         $dynamicPath = "{$tableName}/{$this->field}/{$this->disk_name}";
         return url(Storage::url($dynamicPath));
     }
+
+    /**
+     * Get file content directly.
+     *
+     * @return string|null
+     */
+    public function getContentAttribute()
+    {
+        $content = @file_get_contents($this->url);
+
+        return $content ?? null;
+    }
+
 
 
     public function getPathAttribute()
