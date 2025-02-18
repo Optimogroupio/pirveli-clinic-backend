@@ -10,7 +10,7 @@ class FileAttachment extends Model
 {
     protected $fillable = ['file_name', 'disk_name', 'file_size', 'content_type', 'attachment_id', 'attachment_type', 'field', 'is_public'];
 
-    protected $appends = ['url', 'content'];
+    protected $appends = ['url', 'svg_content'];
 
     /**
      * Get the full URL of the stored file.
@@ -34,14 +34,15 @@ class FileAttachment extends Model
      *
      * @return string|null
      */
-    public function getContentAttribute()
+    public function getSvgContentAttribute()
     {
-        $content = @file_get_contents($this->url);
+        if(str_ends_with($this->disk_name, ".svg")){
+            return @file_get_contents($this->url) ?? null;
+        }
 
-        return $content ?? null;
+        return null;
+
     }
-
-
 
     public function getPathAttribute()
     {
