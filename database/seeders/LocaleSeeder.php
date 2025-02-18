@@ -14,9 +14,9 @@ class LocaleSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'ქარ',
-                'code' => 'ka',
-                'is_default' => 1,
+                'name' => 'РУС',
+                'code' => 'ru',
+                'is_default' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -28,9 +28,9 @@ class LocaleSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'РУС',
-                'code' => 'ru',
-                'is_default' => 0,
+                'name' => 'ქარ',
+                'code' => 'ka',
+                'is_default' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
