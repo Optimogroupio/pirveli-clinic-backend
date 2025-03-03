@@ -9,7 +9,6 @@ class OtherDoctorsQuery
     public function otherDoctors($root, array $args)
     {
         return Doctor::where('id', '!=', $root->id)
-            ->take(4)
             ->get();
     }
 }

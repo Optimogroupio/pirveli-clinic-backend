@@ -54,7 +54,10 @@ class DashboardNewsService
                 $this->attachmentService->attachFile($model, $file, 'image');
             }
 
-            $model->doctors()->sync($data['doctors']);
+            $doctors = $data['doctors'] ?? null;
+            if($doctors) {
+                $model->doctors()->sync($data['doctors']);
+            }
 
             DB::commit();
 

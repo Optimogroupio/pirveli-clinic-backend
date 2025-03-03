@@ -17,7 +17,7 @@ class DashboardUpdateNewsRequest extends TranslatableRequest
             'title' => 'required|string|unique:news,title,' . $this->route('news'),
             'description' => 'string|nullable',
             'service_id' => 'required|exists:services,id',
-            'doctors' => 'required|array',
+            'doctors' => 'nullable|array',
             'doctors.*' => 'exists:doctors,id',
             'image' => 'file_attachment',
             'meta_title' => 'string|nullable',
