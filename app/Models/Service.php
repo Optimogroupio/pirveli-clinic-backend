@@ -27,7 +27,8 @@ class Service extends Model
         'description',
         'service_category_id',
         'meta_title',
-        'meta_description'
+        'meta_description',
+        'sort_order',
     ];
 
     public $translatableAttributes = ['name', 'description', 'description', 'meta_title', 'meta_description'];

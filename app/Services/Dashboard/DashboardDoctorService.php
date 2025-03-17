@@ -28,14 +28,14 @@ class DashboardDoctorService
      * @param int $perPage
      * @return mixed
      */
-    public function getPaginatedDoctors(array $filters, int $perPage = 10): mixed
+    public function getPaginatedDoctors(array $filters, ?int $perPage = 10): mixed
     {
-        return $this->doctorRepository->query()
+        $query = $this->doctorRepository->query()
             ->with('image')
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('full_name', 'like', "%$search%"))
-            ->orderBy($filters['sort_by'] ?? 'id', $filters['sort_direction'] ?? 'desc')
-            ->paginate($perPage)
-            ->withQueryString();
+            ->orderBy($filters['sort_by'] ?? 'sort_order', $filters['sort_direction'] ?? 'asc');
+
+        return $perPage ? $query->paginate($perPage)->withQueryString() : $query->get();
     }
 
     /**
@@ -125,6 +125,38 @@ class DashboardDoctorService
             Log::error('Failed to delete doctor: ' . $e->getMessage());
 
             throw new \RuntimeException('Could not delete doctor');
+        }
+    }
+
+    /**
+     * Update the order of doctor.
+     *
+     * @param array $data
+     * @return bool
+     * @throws \RuntimeException
+     */
+    public function updateDoctorOrder(array $data): bool
+    {
+        try {
+            DB::beginTransaction();
+
+            foreach ($data['orderedIds'] as $doctor) {
+                $model = $this->doctorRepository->find($doctor['id']);
+
+                if (!$model) {
+                    throw new \RuntimeException("Doctor with ID {$doctor['id']} not found.");
+                }
+
+                $model->update(['sort_order' => $doctor['order']]);
+            }
+
+            DB::commit();
+            return true;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to update doctor detail order: ' . $e->getMessage());
+            throw new \RuntimeException('Could not update doctor detail order');
         }
     }
 

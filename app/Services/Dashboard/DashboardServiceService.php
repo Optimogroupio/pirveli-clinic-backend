@@ -30,7 +30,7 @@ class DashboardServiceService
         return $this->serviceRepository->query()
             ->with('image')
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('name', 'like', "%$search%"))
-            ->orderBy($filters['sort_by'] ?? 'id', $filters['sort_direction'] ?? 'desc')
+            ->orderBy($filters['sort_by'] ?? 'sort_order', $filters['sort_direction'] ?? 'asc')
             ->paginate($perPage)
             ->withQueryString();
     }
@@ -117,6 +117,40 @@ class DashboardServiceService
             Log::error('Failed to delete service: ' . $e->getMessage());
 
             throw new \RuntimeException('Could not delete service');
+        }
+    }
+
+
+
+    /**
+     * Update the order of service.
+     *
+     * @param array $data
+     * @return bool
+     * @throws \RuntimeException
+     */
+    public function updateServiceOrder(array $data): bool
+    {
+        try {
+            DB::beginTransaction();
+
+            foreach ($data['orderedIds'] as $service) {
+                $model = $this->serviceRepository->find($service['id']);
+
+                if (!$model) {
+                    throw new \RuntimeException("Service with ID {$service['id']} not found.");
+                }
+
+                $model->update(['sort_order' => $service['order']]);
+            }
+
+            DB::commit();
+            return true;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to update service order: ' . $e->getMessage());
+            throw new \RuntimeException('Could not update service  order');
         }
     }
 }

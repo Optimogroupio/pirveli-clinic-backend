@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Facades\Toast;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DoctorDetail\DashboardUpdateDoctorDetailOrder;
 use App\Http\Requests\Service\DashboardStoreLanguageRequest;
 use App\Http\Requests\Service\DashboardStoreServiceRequest;
 use App\Http\Requests\Service\DashboardUpdateLanguageRequest;
+use App\Http\Requests\Service\DashboardUpdateServiceOrderRequest;
 use App\Http\Requests\Service\DashboardUpdateServiceRequest;
 use App\Repositories\ServiceCategoryRepository;
 use App\Repositories\ServiceRepository;
 use App\Services\Dashboard\DashboardServiceService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Request;
 
 class DashboardServiceController extends Controller
@@ -32,8 +35,11 @@ class DashboardServiceController extends Controller
      */
     public function index()
     {
-        $filters = Request::only('search', 'sort_by', 'sort_direction');
-        $services = $this->serviceService->getPaginatedServices($filters, 10);
+        $filters = Request::only('search', 'sort_by', 'sort_direction', 'per_page');
+        $perPage = $filters['per_page'] ?? 10;
+
+        $perPage = ($perPage === 'all') ? 100 : (int) $perPage;
+        $services = $this->serviceService->getPaginatedServices($filters, $perPage);
 
         return inertia('Service/List', [
             'filters' => $filters,
@@ -115,6 +121,24 @@ class DashboardServiceController extends Controller
         $this->serviceService->deleteService($id);
 
         Toast::message('Service was deleted successfully.')
+            ->type('success')
+            ->autoDismiss(5)
+            ->position('bottom-right')
+            ->send();
+
+        return redirect()->route('dashboard.services.index');
+    }
+
+    /**
+     * Update service order
+     * @param DashboardUpdateServiceOrderRequest $request
+     * @return RedirectResponse
+     */
+    public function updateServiceOrder(DashboardUpdateServiceOrderRequest $request)
+    {
+        $this->serviceService->updateServiceOrder($request->validated());
+
+        Toast::message('Service order updated successfully.')
             ->type('success')
             ->autoDismiss(5)
             ->position('bottom-right')

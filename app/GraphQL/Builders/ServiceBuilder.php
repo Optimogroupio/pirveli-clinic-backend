@@ -31,6 +31,6 @@ class ServiceBuilder extends Builder
             $query->where('service_category_id', $args['service_category_id']);
         }
 
-        return $query;
+        return $query->orderBy('sort_order');
     }
 }

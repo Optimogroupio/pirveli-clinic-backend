@@ -26,7 +26,8 @@ class Doctor extends Model
         'position',
         'service_id',
         'meta_title',
-        'meta_description'
+        'meta_description',
+        'sort_order',
     ];
 
     public $translatableAttributes = ['full_name', 'meta_title', 'meta_description'];

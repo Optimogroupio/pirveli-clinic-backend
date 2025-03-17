@@ -81,12 +81,14 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
             // Services
             Route::resource('services', DashboardServiceController::class)->except('show');
+            Route::post('/services/update-order', [DashboardServiceController::class, 'updateServiceOrder'])->name('services.reorder');
 
             // Languages
             Route::resource('languages', DashboardLanguageController::class)->except('show');
 
             // Doctors and Doctor Details
             Route::resource('doctors', DashboardDoctorController::class)->except('show');
+            Route::post('/doctors/update-order', [DashboardDoctorController::class, 'updateDoctorOrder'])->name('doctors.reorder');
 
             // Specialty
             Route::resource('specialties', DashboardSpecialtyController::class)->except('show');

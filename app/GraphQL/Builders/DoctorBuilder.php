@@ -34,6 +34,6 @@ class DoctorBuilder
             });
         }
 
-        return $query;
+        return $query->orderBy('sort_order');
     }
 }

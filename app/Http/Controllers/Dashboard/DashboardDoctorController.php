@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Facades\Toast;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Doctor\DashboardStoreDoctorRequest;
+use App\Http\Requests\Doctor\DashboardUpdateDoctorOrderRequest;
 use App\Http\Requests\Doctor\DashboardUpdateDoctorRequest;
 use App\Http\Requests\DoctorDetail\DashboardDeleteMultipleDoctorDetail;
 use App\Http\Requests\DoctorDetail\DashboardStoreDoctorDetailRequest;
@@ -45,14 +46,19 @@ class DashboardDoctorController extends Controller
      */
     public function index()
     {
-        $filters = Request::only('search', 'sort_by', 'sort_direction');
-        $doctors = $this->doctorService->getPaginatedDoctors($filters, 10);
+        $filters = Request::only('search', 'sort_by', 'sort_direction', 'per_page');
+        $perPage = $filters['per_page'] ?? 10;
+
+        $perPage = ($perPage === 'all') ? 100 : (int) $perPage;
+
+        $doctors = $this->doctorService->getPaginatedDoctors($filters, $perPage);
 
         return inertia('Doctor/List', [
             'filters' => $filters,
             'doctors' => $doctors
         ]);
     }
+
 
     /**
      * Create page
@@ -138,6 +144,24 @@ class DashboardDoctorController extends Controller
         $this->doctorService->deleteDoctor($id);
 
         Toast::message('Doctor was deleted successfully.')
+            ->type('success')
+            ->autoDismiss(5)
+            ->position('bottom-right')
+            ->send();
+
+        return redirect()->route('dashboard.doctors.index');
+    }
+
+    /**
+     * Update doctor detail order
+     * @param DashboardUpdateDoctorOrderRequest $request
+     * @return RedirectResponse
+     */
+    public function updateDoctorOrder(DashboardUpdateDoctorOrderRequest $request)
+    {
+        $this->doctorService->updateDoctorOrder($request->validated());
+
+        Toast::message('Doctor order updated successfully.')
             ->type('success')
             ->autoDismiss(5)
             ->position('bottom-right')
