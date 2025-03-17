@@ -68,9 +68,8 @@ type Mutation {
     createAppointment(
         name: String
         surname: String
-        specialty_id: ID
-        doctor_id: ID
         phone: String
+        comment: String
     ): AppointmentPayload @field(resolver: "App\\GraphQL\\Mutations\\CreateAppointmentMutation") @validator
 }
 

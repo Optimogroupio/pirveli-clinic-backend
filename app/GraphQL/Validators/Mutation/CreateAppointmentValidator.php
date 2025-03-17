@@ -27,17 +27,15 @@ final class CreateAppointmentValidator extends Validator
                 'min:3',
                 'max:255',
             ],
-            'specialty_id' => [
-                'nullable',
-                'exists:specialties,id',
-            ],
-            'doctor_id' => [
-                'nullable',
-                'exists:doctors,id',
-            ],
             'phone' => [
                 'required',
                 'regex:/^(\+995\d{9}|032\d{6}|\d{9})$/',
+            ],
+            'comment' => [
+                'required',
+                'string',
+                'min:10',
+                'max:500',
             ]
         ];
     }
@@ -61,8 +59,10 @@ final class CreateAppointmentValidator extends Validator
                 'surname.string' => 'გვარი უნდა იყოს სტრიქონი',
                 'surname.min' => 'გვარი უნდა შედგებოდეს მინიმუმ 3 სიმბოლოსგან',
                 'surname.max' => 'გვარი უნდა შედგებოდეს მაქსიუმუმ 255 სიმბოლოსგან',
-                'specialty_id.exists' => 'სპეციალობა მითითებული აიდით არ მოიძებნა',
-                'doctor_id.exists' => 'ექიმი მითითებული აიდით არ მოიძებნა',
+                'comment.required' => 'კომენტარი აუცილებელია',
+                'comment.string' => 'კომენტარი უნდა იყოს სტრიქონი',
+                'comment.min' => 'კომენტარი უნდა შედგებოდეს მინიმუმ 10 სიმბოლოსგან',
+                'comment.max' => 'კომენტარი უნდა შედგებოდეს მაქსიუმუმ 500 სიმბოლოსგან',
                 'phone.required' => 'ტელეფონის ნომერი აუცილებელია',
                 'phone.regex' => 'ნომრის ფორმატი უნდა ემთხვეოდეს რომელიმეს: xxxxxxxxx, +995xxxxxxxxx, ან 032xxxxxxx.',
             ],
@@ -75,8 +75,6 @@ final class CreateAppointmentValidator extends Validator
                 'surname.string' => 'The surname must be a string.',
                 'surname.min' => 'The surname must be at least 3 characters long.',
                 'surname.max' => 'The surname must not exceed 255 characters.',
-                'specialty_id.exists' => 'The specified specialty ID was not found.',
-                'doctor_id.exists' => 'The specified doctor ID was not found.',
                 'phone.required' => 'The phone number is required.',
                 'phone.regex' => 'The phone number format must be one of the following: xxxxxxxxx, +995xxxxxxxxx, or 032xxxxxxx.',
             ],
@@ -89,8 +87,6 @@ final class CreateAppointmentValidator extends Validator
                 'surname.string' => 'Фамилия должна быть строкой.',
                 'surname.min' => 'Фамилия должна содержать минимум 3 символа.',
                 'surname.max' => 'Фамилия должна содержать не более 255 символов.',
-                'specialty_id.exists' => 'Специальность с указанным ID не найдена.',
-                'doctor_id.exists' => 'Доктор с указанным ID не найден.',
                 'phone.required' => 'Номер телефона обязателен.',
                 'phone.regex' => 'Формат номера телефона должен соответствовать одному из следующих: xxxxxxxxx, +995xxxxxxxxx или 032xxxxxxx.',
             ],
