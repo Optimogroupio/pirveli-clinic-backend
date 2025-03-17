@@ -67,7 +67,8 @@ export default {
                 { key: 'id', label: 'ID', width: '15%' },
                 { key: 'name', label: 'Title', width: '30%' },
                 { key: 'surname', label: 'Surname', width: '30%' },
-                { key: 'phone', label: 'Phone', width: '30%', limit: 40, stripHtml: true }
+                { key: 'phone', label: 'Phone', width: '30%', limit: 40, stripHtml: true },
+                { key: 'comment', label: 'Comment', width: '30%', limit: 40, stripHtml: true }
             ],
             sortBy: 'id',
             sortDirection: 'asc',

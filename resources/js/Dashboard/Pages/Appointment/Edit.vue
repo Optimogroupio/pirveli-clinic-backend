@@ -6,9 +6,8 @@
                 :fields="[
                 { key: 'name', label: 'Name', type: 'text', placeholder: 'Enter name', size: 'inline'},
                 { key: 'surname', label: 'Surname', type: 'text', placeholder: 'Enter surname', size: 'inline' },
-                { key: 'specialty_id', label: 'Specialty', type: 'select', options: specialties, labelKey: 'name', valueKey: 'id', placeholder: 'Select specialty', size: 'inline' },
-                { key: 'doctor_id', label: 'Doctor', type: 'select', options: doctors, labelKey: 'full_name', valueKey: 'id', placeholder: 'Select doctor', size: 'inline' },
                 { key: 'phone', label: 'Phone', type: 'text', placeholder: 'Enter surname'},
+                { key: 'comment', label: 'Comment', type: 'textarea', placeholder: 'Enter comment'},
             ]"
                 :initialData="appointment"
                 submitLabel="Update"
@@ -29,8 +28,6 @@
         components: {Form, Breadcrumbs},
         props: {
             appointment: Object,
-            specialties: Array,
-            doctors: Array,
         },
         setup() {
             const { props } = usePage();

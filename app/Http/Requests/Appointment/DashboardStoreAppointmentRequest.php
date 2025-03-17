@@ -16,9 +16,8 @@ class DashboardStoreAppointmentRequest extends TranslatableRequest
         return [
             'name' => 'required|string',
             'surname' => 'required|string',
-            'specialty_id' => 'nullable|exists:specialties,id',
-            'doctor_id' => 'nullable|exists:doctors,id',
             'phone' => 'required|string',
+            'comment' => 'required|string',
         ];
     }
 }
