@@ -188,7 +188,13 @@ export default {
     },
     methods: {
         updateDisplayData(newData) {
-            this.displayData = this.paginated ? newData.slice(0, 10) : [...newData];
+            // this.displayData = this.paginated ? newData.slice(0, 10) : [...newData];
+            if (this.paginated) {
+                const perPage = this.$attrs["per-page"] || 10;
+                this.displayData = perPage === 'all' ? newData : newData.slice(0, perPage);
+            } else {
+                this.displayData = [...newData];
+            }
         },
         toggleSort(columnKey) {
             const newDirection = this.sortBy === columnKey ? (this.sortDirection === 'asc' ? 'desc' : 'asc') : 'asc';
