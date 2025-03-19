@@ -68,8 +68,9 @@ export default {
             columns: [
                 { key: 'image', label: 'Image', width: '15%', showImage: true },
                 { key: 'id', label: 'ID', width: '15%' },
-                { key: 'title', label: 'Title', width: '30%' },
-                { key: 'description', label: 'Description', width: '30%', limit: 40, stripHtml: true }
+                { key: 'title', label: 'Title', width: '30%', limit: 40, stripHtml: true },
+                { key: 'description', label: 'Description', width: '30%', limit: 40, stripHtml: true },
+                { key: 'position', label: 'Position', width: '5%' }
             ],
             sortBy: 'id',
             sortDirection: 'asc',

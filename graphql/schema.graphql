@@ -58,7 +58,9 @@ type Query {
 
     settings(locale: String!): [Settings!]! @all @setLocale
 
-    slider(locale: String!): [Slider!]! @all @setLocale
+    slider(locale: String!, position: String!): [Slider!]! @all(
+        builder: "App\\GraphQL\\Builders\\SliderBuilder@filterSlider"
+    ) @setLocale
 
 
 
@@ -268,6 +270,9 @@ type Slider{
     id: ID!
     title: String!
     description: String!
+    opens_modal: Boolean
+    button_url: String
+    button_title: String
     image: FileAttachment @morphOne
     translations: [Translation] @morphMany
     created_at: DateTime!

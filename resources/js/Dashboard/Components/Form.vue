@@ -164,6 +164,7 @@ import {computed, onMounted, reactive, toRefs} from 'vue';
 import {usePage} from '@inertiajs/vue3';
 import {Ckeditor} from '@ckeditor/ckeditor5-vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CodeEditor from '@ckeditor/ckeditor5-build-classic';
 import VueSelect from 'vue3-select-component';
 import ToggleSwitch from './ToggleSwitch.vue';
 import flatPickr from 'vue-flatpickr-component';

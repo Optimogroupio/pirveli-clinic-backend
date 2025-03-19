@@ -4,13 +4,30 @@
         <h1 class="text-2xl font-bold mb-4">Edit Slider</h1>
         <Form
             :fields="[
-                    { key: 'title', label: 'Title', type: 'text', placeholder: 'Enter title', translatable: true },
-                    { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', translatable: true, size: 'full' },
-                    { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'half' },
+                { key: 'title', label: 'Title', type: 'text', placeholder: 'Enter title', size: 'full', translatable: true },
+                { key: 'description', label: 'Description', type: 'rich-editor', placeholder: 'Enter description', size: 'full', translatable: true },
+                {
+                    key: 'position',
+                    label: 'Position',
+                    type: 'select',
+                    options: [
+                        { label: 'Top', value: 'top' },
+                        { label: 'Bottom', value: 'bottom' }
+                    ],
+                    placeholder: 'Select position'
+                },
+                { key: 'opens_modal', label: 'Opens modal?', type: 'toggle', size: 'left'},
+                { key: 'button_url', label: 'Button url', type: 'text', placeholder: 'Button url', size: 'inline'},
+                { key: 'button_title', label: 'Button title', type: 'text', placeholder: 'Button title', size: 'inline', translatable: true},
+                { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'inline' },
                 ]"
             :initialData="{
                     title: slider.title,
                     description: slider.description,
+                    position: slider.position,
+                    opens_modal: slider.opens_modal,
+                    button_url: slider.button_url,
+                    button_title: slider.button_title,
                     image: slider.image,
                     translations: slider.translations,
                     }"

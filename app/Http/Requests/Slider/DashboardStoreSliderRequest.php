@@ -14,8 +14,12 @@ class DashboardStoreSliderRequest extends TranslatableRequest
     public function rules()
     {
         $rules = [
-            'title' => 'required|string|unique:news,title',
+            'title' => 'required|string',
             'description' => 'string|required|min:100',
+            'position' => 'string|required|in:top,bottom',
+            'opens_modal' => 'nullable|integer|in:0,1',
+            'button_url' => 'nullable|string|url',
+            'button_title' => 'nullable|string',
             'image' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ];
 

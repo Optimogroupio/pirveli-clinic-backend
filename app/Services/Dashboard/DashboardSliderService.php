@@ -90,6 +90,7 @@ class DashboardSliderService
 
             return $slider;
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             Log::error('Failed to update slider: ' . $e->getMessage());
 

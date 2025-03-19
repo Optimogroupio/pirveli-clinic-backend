@@ -15,8 +15,12 @@ class DashboardUpdateSliderRequest extends TranslatableRequest
     public function rules()
     {
         $rules = [
-            'title' => 'nullable|string|unique:slider,title,' . $this->route('slider'),
+            'title' => 'nullable|string',
             'description' => 'nullable|string|min:100',
+            'position' => 'string|required|in:top,bottom',
+            'opens_modal' => 'nullable|integer|in:0,1',
+            'button_url' => 'nullable|string|url',
+            'button_title' => 'nullable|string',
             'image' => 'file_attachment'
         ];
 
