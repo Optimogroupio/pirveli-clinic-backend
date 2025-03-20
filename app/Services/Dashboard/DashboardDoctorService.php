@@ -31,7 +31,7 @@ class DashboardDoctorService
     public function getPaginatedDoctors(array $filters, ?int $perPage = 10): mixed
     {
         $query = $this->doctorRepository->query()
-            ->with('image')
+            ->with('image','specialties')
             ->when($filters['search'] ?? null, fn($query, $search) => $query->where('full_name', 'like', "%$search%"))
             ->orderBy($filters['sort_by'] ?? 'sort_order', $filters['sort_direction'] ?? 'asc');
 

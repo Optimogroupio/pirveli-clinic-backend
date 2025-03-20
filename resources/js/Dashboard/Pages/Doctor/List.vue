@@ -87,7 +87,7 @@
                     { key: 'id', label: 'ID', width: '15%' },
                     { key: 'image', label: 'Image', width: '15%', showImage: true },
                     { key: 'full_name', label: 'Full Name', width: '30%' },
-                    { key: 'position', label: 'Position', width: '30%' }
+                    { key: 'specialties', label: 'Specialties', width: '30%', relationAttribute: 'name' },
                 ],
                 sortBy: this.filters.sort_by || 'sort_order',
                 sortDirection: this.filters.sort_direction || 'asc',

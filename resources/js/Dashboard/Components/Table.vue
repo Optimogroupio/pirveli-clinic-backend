@@ -230,8 +230,14 @@ export default {
             this.closeModal();
         },
         formatColumnValue(value, column) {
+            console.log(value)
             if (value === null || value === undefined) {
-                return '';
+                return 'N/A';
+            }
+
+            if (Array.isArray(value) && value.length > 0) {
+                const attribute = column.relationAttribute || 'name'; // Default to 'name' if not specified
+                return value.map(item => item[attribute] || 'N/A').join(', ');
             }
 
             if (column.stripHtml) {
