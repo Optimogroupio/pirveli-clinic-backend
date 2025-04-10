@@ -4,9 +4,8 @@
         <h1 class="text-2xl font-bold mb-4">Create Appointment</h1>
         <Form
             :fields="[
-                { key: 'name', label: 'Name', type: 'text', placeholder: 'Enter name', size: 'inline'},
-                { key: 'surname', label: 'Surname', type: 'text', placeholder: 'Enter surname', size: 'inline' },
-                { key: 'phone', label: 'Phone', type: 'text', placeholder: 'Enter surname'},
+                { key: 'full_name', label: 'Full Name', type: 'text', placeholder: 'Enter full name', size: 'inline'},
+                { key: 'phone', label: 'Contact information', type: 'text', placeholder: 'Enter contact information', size: 'inline'},
                 { key: 'comment', label: 'Comment', type: 'textarea', placeholder: 'Enter comment'},
             ]"
             :initialData="{}"

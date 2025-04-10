@@ -66,7 +66,7 @@
                     :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/news') }]"
                 >
                     <i class="fa-solid fa-newspaper mr-2"></i>
-                    News
+                    Blog
                 </Link>
             </li>
             <li>

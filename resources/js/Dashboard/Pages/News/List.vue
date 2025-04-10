@@ -4,7 +4,7 @@
         <breadcrumbs />
 
         <!-- Page Heading -->
-        <h1 class="text-4xl font-bold mb-4">News</h1>
+        <h1 class="text-4xl font-bold mb-4">Blog</h1>
         <!-- Search Input and Create Button Row -->
         <div class="flex items-center justify-between mb-6">
             <!-- Custom Search Input -->

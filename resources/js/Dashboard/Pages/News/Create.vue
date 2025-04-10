@@ -1,7 +1,7 @@
 <template>
     <div>
         <breadcrumbs/>
-        <h1 class="text-2xl font-bold mb-4">Create News</h1>
+        <h1 class="text-2xl font-bold mb-4">Create Blog</h1>
         <Form
             :fields="[
                 { key: 'title', label: 'Title', type: 'text', placeholder: 'Enter title', translatable: true },

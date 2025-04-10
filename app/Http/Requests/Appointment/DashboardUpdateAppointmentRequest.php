@@ -14,8 +14,7 @@ class DashboardUpdateAppointmentRequest extends TranslatableRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'surname' => 'required|string',
+            'full_name' => 'required|string',
             'phone' => 'required|string',
             'comment' => 'required|string',
         ];

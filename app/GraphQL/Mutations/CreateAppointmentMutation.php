@@ -18,8 +18,7 @@ class CreateAppointmentMutation
 
         try {
             $appointment = Appointment::create([
-                'name' => $args['name'],
-                'surname' => $args['surname'],
+                'full_name' => $args['full_name'],
                 'phone' => $args['phone'],
                 'comment' => $args['comment'],
             ]);
