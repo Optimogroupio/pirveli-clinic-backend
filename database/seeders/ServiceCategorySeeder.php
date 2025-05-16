@@ -15,19 +15,16 @@ class ServiceCategorySeeder extends Seeder
         $data = [
             [
                 'name' => 'ამბულატორიული მომსახურება',
-                'description' => 'ამბულატორიული მომსახურება',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'სტაციონალური მომსახურება',
-                'description' => 'სტაციონალური მომსახურება',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'ლაბორატორიულ - დიაგნოსტიკური კვლევები',
-                'description' => 'ლაბორატორიულ - დიაგნოსტიკური კვლევები',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

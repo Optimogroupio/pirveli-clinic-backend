@@ -15,8 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('surname');
+            $table->unsignedBigInteger('specialty_id')->nullable();
+            $table->unsignedBigInteger('doctor_id')->nullable();
             $table->string('phone');
             $table->timestamps();
+
+            $table->foreign('specialty_id')->references('id')->on('specialties')->onDelete('set null');
+            $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('set null');
         });
     }
 

@@ -32,7 +32,7 @@ type Query {
         locale: String!
     ): [Doctor!]! @paginate(
         builder: "App\\GraphQL\\Builders\\DoctorBuilder@filterDoctors"
-        defaultCount: 16
+        defaultCount: 6
     ) @setLocale
 
     all_doctors(

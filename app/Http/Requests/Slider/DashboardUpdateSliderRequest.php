@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Slider;
 
 use App\Http\Requests\TranslatableRequest;
+use App\Rules\FileAttachment;
 use ProtoneMedia\Splade\FileUploads\HasSpladeFileUploads;
 
 class DashboardUpdateSliderRequest extends TranslatableRequest
@@ -21,7 +22,7 @@ class DashboardUpdateSliderRequest extends TranslatableRequest
             'opens_modal' => 'nullable|integer|in:0,1',
             'button_url' => 'nullable|string|url',
             'button_title' => 'nullable|string',
-            'image' => 'file_attachment'
+            'image' => ['nullable', new FileAttachment(), 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
 
         return $this->addTranslatableRules(['title', 'description'], $rules);
