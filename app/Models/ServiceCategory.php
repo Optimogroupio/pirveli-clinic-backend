@@ -24,10 +24,11 @@ class ServiceCategory extends Model
         'slug',
     ];
 
-    public $translatableAttributes = ['name'];
+    public array $translatableAttributes = ['name'];
 
-    public function services(){
-        return $this->hasMany(Service::class);
+    public function services(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Service::class)->orderBy('sort_order');;
     }
 
 }
