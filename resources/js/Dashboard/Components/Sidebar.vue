@@ -162,14 +162,17 @@ const closeSidebar = () => {
 <style scoped>
 .sidebar-nav {
     height: 100vh;
-    width: 256px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    transition: transform 0.3s ease;
-    z-index: 50;
+    width: 260px;
+    padding: 1.5rem;
+    background-color: #006666;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    z-index: 60;
 }
+
 .sidebar-link {
     display: flex;
     align-items: center;
@@ -180,11 +183,29 @@ const closeSidebar = () => {
     text-decoration: none;
     margin-bottom: 5px;
 }
+
 .sidebar-link:hover {
     background-color: #2d3748;
 }
+
 .sidebar-link.active {
     background-color: #4a5568;
     font-weight: bold;
 }
+.sidebar-nav {
+    min-height: 100%;
+    background-color: #006666;
+}
+
+@media (max-width: 1023px) {
+    .sidebar-nav {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        overflow-y: auto;
+    }
+}
+
 </style>
+
