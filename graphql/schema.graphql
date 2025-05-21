@@ -267,11 +267,9 @@ type Settings{
 "Slider "
 type Slider{
     id: ID!
-    title: String!
-    description: String!
-    opens_modal: Boolean
-    button_url: String
-    button_title: String
+    title: String
+    description: String
+    url: String
     image: FileAttachment @morphOne
     translations: [Translation] @morphMany
     created_at: DateTime!

@@ -16,10 +16,8 @@
                     ],
                     placeholder: 'Select position'
                 },
-                { key: 'opens_modal', label: 'Opens modal?', type: 'toggle', size: 'left'},
-                { key: 'button_url', label: 'Button url', type: 'text', placeholder: 'Button url', size: 'inline'},
-                { key: 'button_title', label: 'Button title', type: 'text', placeholder: 'Button title', size: 'inline', translatable: true},
-                { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'inline' },
+                { key: 'URL', label: 'URL', type: 'text', placeholder: 'URL', size: 'left'},
+                { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'left' },
                 ]"
             :initialData="{
                     title: slider.title,

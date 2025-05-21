@@ -57,6 +57,7 @@ class DashboardSliderService
 
             return $model;
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             Log::error('Failed to create slider: ' . $e->getMessage());
 

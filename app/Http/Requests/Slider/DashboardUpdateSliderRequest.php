@@ -19,10 +19,8 @@ class DashboardUpdateSliderRequest extends TranslatableRequest
             'title' => 'nullable|string',
             'description' => 'nullable|string|min:100',
             'position' => 'string|required|in:top,bottom',
-            'opens_modal' => 'nullable|integer|in:0,1',
-            'button_url' => 'nullable|string|url',
-            'button_title' => 'nullable|string',
-            'image' => ['nullable', new FileAttachment(), 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'url' => 'nullable|string|url',
+            'image' => ['nullable', new FileAttachment(), 'image', 'mimes:jpg,jpeg,png, webp', 'max:2048'],
         ];
 
         return $this->addTranslatableRules(['title', 'description'], $rules);

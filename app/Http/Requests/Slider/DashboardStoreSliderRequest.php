@@ -14,13 +14,11 @@ class DashboardStoreSliderRequest extends TranslatableRequest
     public function rules()
     {
         $rules = [
-            'title' => 'required|string',
-            'description' => 'string|required|min:100',
+            'title' => 'nullable|string',
+            'description' => 'string|nullable|min:100',
             'position' => 'string|required|in:top,bottom',
-            'opens_modal' => 'nullable|integer|in:0,1',
-            'button_url' => 'nullable|string|url',
-            'button_title' => 'nullable|string',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+            'url' => 'nullable|string|url',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
         ];
 
         return $this->addTranslatableRules(['title', 'description'], $rules);
