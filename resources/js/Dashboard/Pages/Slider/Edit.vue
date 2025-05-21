@@ -16,16 +16,14 @@
                     ],
                     placeholder: 'Select position'
                 },
-                { key: 'URL', label: 'URL', type: 'text', placeholder: 'URL', size: 'left'},
+                { key: 'url', label: 'URL', type: 'text', placeholder: 'URL', size: 'left'},
                 { key: 'image', label: 'Image', type: 'file', fileType: 'file', multiple: false, size: 'left' },
                 ]"
             :initialData="{
                     title: slider.title,
                     description: slider.description,
                     position: slider.position,
-                    opens_modal: slider.opens_modal,
-                    button_url: slider.button_url,
-                    button_title: slider.button_title,
+                    url: slider.url,
                     image: slider.image,
                     translations: slider.translations,
                     }"
