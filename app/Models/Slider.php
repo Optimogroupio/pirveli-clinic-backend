@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasAttachments;
 use App\Traits\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Slider extends Model
 {
@@ -16,15 +17,13 @@ class Slider extends Model
         'title',
         'description',
         'position',
-        'opens_modal',
-        'button_url',
-        'button_title',
+        'url',
         'sort_order'
     ];
 
-    public $translatableAttributes = ['title', 'description'];
+    public array $translatableAttributes = ['title', 'description'];
 
-    public function image()
+    public function image(): MorphOne
     {
         return $this->attachOne('image');
     }
