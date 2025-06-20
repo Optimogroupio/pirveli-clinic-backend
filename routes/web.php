@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\DashboardAdminsController;
 use App\Http\Controllers\Dashboard\DashboardAppointmentController;
+use App\Http\Controllers\Dashboard\DashboardCategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DashboardDoctorController;
 use App\Http\Controllers\Dashboard\DashboardLanguageController;
@@ -95,6 +96,9 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
             // Appointmnets
             Route::resource('appointments', DashboardAppointmentController::class)->except('show');
+
+            // Categories
+            Route::resource('categories', DashboardCategoryController::class)->except('show');
 
             Route::prefix('doctors/{doctorId}')->name('doctors.')->group(function () {
                 Route::prefix('doctor-details/{type}')

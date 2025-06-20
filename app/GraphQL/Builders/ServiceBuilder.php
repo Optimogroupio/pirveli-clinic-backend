@@ -31,6 +31,12 @@ class ServiceBuilder extends Builder
             $query->where('service_category_id', $args['service_category_id']);
         }
 
+        if (!empty($args['category_slug'])) {
+            $query->whereHas('categories', function ($q) use ($args) {
+                $q->where('slug', $args['category_slug']);
+            });
+        }
+
         return $query->orderBy('sort_order');
     }
 }

@@ -6,24 +6,28 @@ use App\Facades\Toast;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\News\DashboardStoreNewsRequest;
 use App\Http\Requests\News\DashboardUpdateNewsRequest;
-use App\Http\Requests\Slider\DashboardUpdateSliderRequest;
 use App\Repositories\DoctorRepository;
 use App\Repositories\NewsRepository;
 use App\Repositories\ServiceRepository;
 use App\Services\Dashboard\DashboardNewsService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Request;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class DashboardNewsController extends Controller
 {
-    protected $newsRepository;
-    protected $newsService;
-    protected $serviceRepository;
+    protected NewsRepository $newsRepository;
+    protected DashboardNewsService $newsService;
+    protected ServiceRepository $serviceRepository;
 
-    protected $doctorRepository;
+    protected DoctorRepository $doctorRepository;
 
     /**
-     * @param $newsRepository
-     * @param $newsService
+     * @param NewsRepository $newsRepository
+     * @param DashboardNewsService $newsService
+     * @param ServiceRepository $serviceRepository
+     * @param DoctorRepository $doctorRepository
      */
     public function __construct(NewsRepository $newsRepository, DashboardNewsService $newsService, ServiceRepository $serviceRepository, DoctorRepository $doctorRepository)
     {
@@ -36,9 +40,9 @@ class DashboardNewsController extends Controller
 
     /**
      * List page
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
-    public function index()
+    public function index(): Response|ResponseFactory
     {
         $filters = Request::only('search', 'sort_by', 'sort_direction');
         $news = $this->newsService->getPaginatedNews($filters, 10);
@@ -51,9 +55,9 @@ class DashboardNewsController extends Controller
 
     /**
      * Create page
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
         $news = $this->newsRepository->all();
         $services = $this->serviceRepository->all();
@@ -64,9 +68,9 @@ class DashboardNewsController extends Controller
     /**
      * Store method
      * @param DashboardStoreNewsRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(DashboardStoreNewsRequest $request)
+    public function store(DashboardStoreNewsRequest $request): RedirectResponse
     {
         $this->newsService->createNews($request->validated());
 
@@ -82,9 +86,9 @@ class DashboardNewsController extends Controller
     /**
      * Edit page
      * @param $id
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
-    public function edit($id)
+    public function edit($id): Response|ResponseFactory
     {
         $news = $this->newsRepository->find($id, ['doctors','translations', 'image']);
         $services = $this->serviceRepository->all();
@@ -101,9 +105,9 @@ class DashboardNewsController extends Controller
      * Update method
      * @param DashboardUpdateNewsRequest $request
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(DashboardUpdateNewsRequest $request, $id)
+    public function update(DashboardUpdateNewsRequest $request, $id): RedirectResponse
     {
         $this->newsService->updateNews($id, $request->validated());
 
@@ -119,9 +123,9 @@ class DashboardNewsController extends Controller
     /**
      * Delete method
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $this->newsRepository->delete($id);
 

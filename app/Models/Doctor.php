@@ -6,6 +6,10 @@ use App\Traits\HasAttachments;
 use App\Traits\Translatable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\App;
 
 class Doctor extends Model
@@ -32,22 +36,22 @@ class Doctor extends Model
 
     public $translatableAttributes = ['full_name', 'meta_title', 'meta_description'];
 
-    public function service()
+    public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
 
-    public function specialties()
+    public function specialties(): BelongsToMany
     {
         return $this->belongsToMany(Specialty::class, 'doctor_specialties');
     }
 
-    public function news()
+    public function news(): BelongsToMany
     {
         return $this->belongsToMany(News::class, 'doctor_news');
     }
 
-    public function doctorDetails()
+    public function doctorDetails(): HasMany
     {
         return $this->hasMany(DoctorDetail::class);
     }
@@ -72,7 +76,7 @@ class Doctor extends Model
         return $this->belongsToMany(Language::class, 'doctor_languages')->withTimestamps();
     }
 
-    public function image()
+    public function image(): MorphOne
     {
         return $this->attachOne('image');
     }

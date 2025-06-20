@@ -35,6 +35,15 @@
             </li>
             <li>
                 <Link
+                    href="/dashboard/categories"
+                    :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/categories') }]"
+                >
+                    <i class="fa fa-list mr-2"></i>
+                    Categories
+                </Link>
+            </li>
+            <li>
+                <Link
                     href="/dashboard/services"
                     :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/services') }]"
                 >

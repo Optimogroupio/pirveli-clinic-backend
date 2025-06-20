@@ -8,6 +8,7 @@ type Query {
         name: String
         description: String
         service_category_id: ID
+        category_slug: String
         locale: String!
     ): [Service!]! @paginate(
         defaultCount: 21
@@ -62,7 +63,13 @@ type Query {
         builder: "App\\GraphQL\\Builders\\SliderBuilder@filterSlider"
     ) @setLocale
 
+    categories(
+        name: String
+        description: String
+        locale: String!
+    ): [Category!]! @all @setLocale
 
+    category(slug: String @eq, locale: String): Category @find @setLocale
 
 }
 
@@ -111,6 +118,7 @@ type Service{
     service_category: ServiceCategory @belongsTo
     doctors: [Doctor] @hasMany
     news: [News] @hasMany
+    categories: Category @belongsToMany
     translations: [Translation] @morphMany
     created_at: DateTime!
     updated_at: DateTime!
@@ -282,3 +290,19 @@ type AppointmentPayload {
     message: String!
     appointment: Appointment
 }
+
+"Category"
+type Category{
+    id: ID!
+    name: String!
+    slug: String!
+    description: String
+    video_iframe: String
+    services: Service @belongsToMany
+    meta_title: String
+    meta_description: String
+    translations: [Translation] @morphMany
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
