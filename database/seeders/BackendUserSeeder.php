@@ -10,7 +10,6 @@ class BackendUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     * @param $str
      */
     public function run(): void
     {
