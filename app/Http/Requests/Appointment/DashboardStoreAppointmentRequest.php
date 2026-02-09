@@ -6,12 +6,12 @@ use App\Http\Requests\TranslatableRequest;
 
 class DashboardStoreAppointmentRequest extends TranslatableRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'full_name' => 'required|string',

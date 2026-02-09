@@ -6,12 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DashboardDeleteMultipleDoctorDetail extends FormRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'ids' => 'required|array',

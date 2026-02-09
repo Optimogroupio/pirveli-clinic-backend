@@ -6,12 +6,12 @@ use App\Http\Requests\TranslatableRequest;
 
 class DashboardUpdateDoctorDetailRequest extends TranslatableRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             'doctor_id' => 'required|exists:doctors,id',

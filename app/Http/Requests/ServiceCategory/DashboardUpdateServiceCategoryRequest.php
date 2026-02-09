@@ -6,12 +6,12 @@ use App\Http\Requests\TranslatableRequest;
 
 class DashboardUpdateServiceCategoryRequest extends TranslatableRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             'name' => 'required|string|unique:service_categories,name,' . $this->route('service_category')

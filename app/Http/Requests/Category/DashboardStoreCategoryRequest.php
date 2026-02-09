@@ -6,12 +6,12 @@ use App\Http\Requests\TranslatableRequest;
 
 class DashboardStoreCategoryRequest extends TranslatableRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             'name' => 'required|string|unique:categories,name',

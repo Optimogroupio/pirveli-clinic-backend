@@ -6,18 +6,18 @@ use App\Http\Requests\TranslatableRequest;
 
 class DashboardStoreServiceRequest extends TranslatableRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             'name' => 'required|string|unique:service_categories,name',
             'short_description' => 'required|string',
             'description' => 'string|nullable',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
+            'image' => 'nullable|mimes:jpg,jpeg,png,svg,webp|max:2048',
             'service_category_id' => 'required|exists:service_categories,id',
             'meta_title' => 'string|nullable',
             'meta_description' => 'string|nullable',

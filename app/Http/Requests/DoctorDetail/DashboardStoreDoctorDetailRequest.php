@@ -12,7 +12,7 @@ class DashboardStoreDoctorDetailRequest extends TranslatableRequest
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             'doctor_id' => 'required|exists:doctors,id',
@@ -27,7 +27,7 @@ class DashboardStoreDoctorDetailRequest extends TranslatableRequest
         return $this->addTranslatableRules(['name', 'title'], $rules);
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'start_date' => $this->start_date ? Carbon::parse($this->start_date)->startOfDay() : null,

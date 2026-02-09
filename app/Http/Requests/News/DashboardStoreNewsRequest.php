@@ -6,12 +6,12 @@ use App\Http\Requests\TranslatableRequest;
 
 class DashboardStoreNewsRequest extends TranslatableRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             'title' => 'required|string|unique:news,title',
@@ -19,7 +19,7 @@ class DashboardStoreNewsRequest extends TranslatableRequest
             'service_id' => 'required|exists:services,id',
             'doctors' => 'nullable|array',
             'doctors.*' => 'exists:doctors,id',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'required|mimes:jpg,jpeg,png,svg,webp|max:2048',
             'meta_title' => 'string|nullable',
             'meta_description' => 'string|nullable',
         ];

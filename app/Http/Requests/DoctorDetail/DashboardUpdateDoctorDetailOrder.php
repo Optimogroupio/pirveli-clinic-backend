@@ -6,12 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DashboardUpdateDoctorDetailOrder extends FormRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'orderedIds' => 'required|array',
@@ -20,7 +20,7 @@ class DashboardUpdateDoctorDetailOrder extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'orderedIds.required' => 'The orderedIds field is required.',

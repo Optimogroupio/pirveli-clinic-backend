@@ -6,19 +6,19 @@ use App\Http\Requests\TranslatableRequest;
 
 class DashboardStoreDoctorRequest extends TranslatableRequest
 {
-    public function authorize()
+    public function authorize(): true
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             'full_name' => 'required|string',
             'service_id' => 'required|exists:services,id',
             'specialties' => 'required|array',
             'languages' => 'required|array',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'required|mimes:jpg,jpeg,png,svg,webp|max:2048',
             'meta_title' => 'string|nullable',
             'meta_description' => 'string|nullable'
         ];
