@@ -18,8 +18,29 @@ class DoctorBuilder
 
         $query = Doctor::query();
 
-        if (isset($args['full_name'])) {
-            $query->filterByTranslatedField($locale, $defaultLocale, 'full_name', $args['full_name']);
+        if (!empty($args['query'])) {
+            $search = $args['query'];
+
+            $query->where(function (Builder $q) use ($search, $locale, $defaultLocale) {
+
+                // 🔍 Doctor full_name (translated)
+                $q->filterByTranslatedField(
+                    $locale,
+                    $defaultLocale,
+                    'full_name',
+                    $search
+                );
+
+                // 🔍 Specialty name (translated relation)
+                $q->orWhereHas('specialties', function (Builder $sq) use ($search, $locale, $defaultLocale) {
+                    $sq->filterByTranslatedField(
+                        $locale,
+                        $defaultLocale,
+                        'name',
+                        $search
+                    );
+                });
+            });
         }
 
         if (isset($args['specialty_id'])) {

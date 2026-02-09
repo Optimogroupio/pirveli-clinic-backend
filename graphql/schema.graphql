@@ -27,7 +27,7 @@ type Query {
     single_service_category(id: ID @eq, locale: String): ServiceCategory @find @setLocale
 
     doctors(
-        full_name: String
+        query: String
         specialty_id: ID
         specialty_name: String
         locale: String!

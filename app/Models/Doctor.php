@@ -34,7 +34,7 @@ class Doctor extends Model
         'sort_order',
     ];
 
-    public $translatableAttributes = ['full_name', 'meta_title', 'meta_description'];
+    public array $translatableAttributes = ['full_name', 'meta_title', 'meta_description'];
 
     public function service(): BelongsTo
     {
@@ -71,7 +71,7 @@ class Doctor extends Model
         return $this->doctorDetails()->certificate()->orderBy('sort_order');
     }
 
-    public function languages()
+    public function languages(): BelongsToMany
     {
         return $this->belongsToMany(Language::class, 'doctor_languages')->withTimestamps();
     }
