@@ -18,7 +18,7 @@ class DashboardStoreSliderRequest extends TranslatableRequest
             'description' => 'string|nullable|min:100',
             'position' => 'string|required|in:top,bottom',
             'url' => 'nullable|string|url',
-            'image' => 'required|mimes:jpg,jpeg,png,svg,webp|max:2048|max:2048'
+            'image' => 'required|mimes:webp|max:2048'
         ];
 
 

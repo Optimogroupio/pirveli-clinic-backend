@@ -27,7 +27,7 @@ class DashboardUpdateSliderRequest extends TranslatableRequest
         }
 
         if ($this->file('image')) {
-            $rules['image'][] = 'mimes:jpg,jpeg,png,svg,webp';
+            $rules['image'][] = 'mimes:webp';
             $rules['image'][] = 'max:2048';
         }
 

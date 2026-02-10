@@ -29,7 +29,7 @@ class DashboardUpdateServiceRequest extends TranslatableRequest
         }
 
         if ($this->file('image')) {
-            $rules['image'][] = 'mimes:jpg,jpeg,png,svg,webp';
+            $rules['image'][] = 'mimes:svg';
             $rules['image'][] = 'max:2048';
         }
 
