@@ -98,7 +98,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
             Route::resource('appointments', DashboardAppointmentController::class)->except('show');
 
             // Categories
-            Route::resource('categories', DashboardCategoryController::class)->except('show');
+            Route::resource('check-up', DashboardCategoryController::class)->except('show');
 
             Route::prefix('doctors/{doctorId}')->name('doctors.')->group(function () {
                 Route::prefix('doctor-details/{type}')

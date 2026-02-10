@@ -26,7 +26,7 @@ class DashboardLoginController extends Controller
 
         $credentials = $request->only('login', 'password');
         if (Auth::guard('dashboard')->attempt($credentials, $request->boolean('remember'))) {
-            return Inertia::location(url('dashboard'));
+            return Inertia::location(url('dashboard/services'));
         }
 
         return back()->withErrors(['login' => 'Invalid login credentials']);

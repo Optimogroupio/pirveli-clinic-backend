@@ -4,7 +4,7 @@
         <breadcrumbs />
 
         <!-- Page Heading -->
-        <h1 class="text-4xl font-bold mb-4">Categories</h1>
+        <h1 class="text-4xl font-bold mb-4">Check-Up</h1>
         <!-- Search Input and Create Button Row -->
         <div class="flex items-center justify-between mb-6">
             <!-- Custom Search Input -->
@@ -17,7 +17,7 @@
             <!-- Create Button -->
             <Link
                 v-if="$can('create category')"
-                href="/dashboard/categories/create"
+                href="/dashboard/check-up/create"
                 class="bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded ml-4"
             >
                 + Create
@@ -79,7 +79,7 @@ export default {
             this.fetchData();
         },
         fetchData(page = 1) {
-            this.$inertia.get('/dashboard/categories', {
+            this.$inertia.get('/dashboard/check-up', {
                 ...this.form,
                 page,
                 sort_by: this.sortBy,
@@ -87,10 +87,10 @@ export default {
             }, { preserveState: true });
         },
         editRecord(categoryId) {
-            this.$inertia.get(`/dashboard/categories/${categoryId}/edit`);
+            this.$inertia.get(`/dashboard/check-up/${categoryId}/edit`);
         },
         confirmDelete(categoryId) {
-            this.$inertia.delete(`/dashboard/categories/${categoryId}`, {
+            this.$inertia.delete(`/dashboard/check-up/${categoryId}`, {
                 onSuccess: () => {
 
                 },

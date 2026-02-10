@@ -11,7 +11,7 @@
             @locale-change="setGlobalLocale"
         />
 
-        <h1 class="text-2xl font-bold mb-4">Edit Category</h1>
+        <h1 class="text-2xl font-bold mb-4">Edit Check-Up</h1>
         <Form
             ref="formRef"
             :fields="[
@@ -75,7 +75,7 @@ export default {
 
         const handleUpdate = (data) => {
             data._method = "put";
-            Inertia.post(`/dashboard/categories/${category.id}`, data);
+            Inertia.post(`/dashboard/check-up/${category.id}`, data);
         };
 
         const setGlobalLocale = (locale) => {

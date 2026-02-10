@@ -67,7 +67,7 @@ class DashboardCategoryController extends Controller
             ->position('bottom-right')
             ->send();
 
-        return redirect()->route('dashboard.categories.index');
+        return redirect()->route('dashboard.check-up.index');
     }
 
     /**
@@ -103,7 +103,7 @@ class DashboardCategoryController extends Controller
             ->position('bottom-right')
             ->send();
 
-        return redirect()->route('dashboard.categories.index');
+        return redirect()->route('dashboard.check-up.index');
     }
 
     /**
@@ -121,6 +121,6 @@ class DashboardCategoryController extends Controller
             ->position('bottom-right')
             ->send();
 
-        return redirect()->route('dashboard.categories.index');
+        return redirect()->route('dashboard.check-up.index');
     }
 }

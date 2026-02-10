@@ -8,24 +8,6 @@
         <ul>
             <li>
                 <Link
-                    href="/dashboard/home"
-                    :class="['sidebar-link', { 'active': $page.url === '/dashboard/home' }]"
-                >
-                    <i class="fa fa-tachometer-alt mr-2"></i>
-                    Dashboard
-                </Link>
-            </li>
-            <li>
-                <Link
-                    href="/dashboard/appointments"
-                    :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/appointments') }]"
-                >
-                    <i class="fa-regular fa-file mr-2"></i>
-                    Appointments
-                </Link>
-            </li>
-            <li>
-                <Link
                     href="/dashboard/service_categories"
                     :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/service_categories') }]"
                 >
@@ -35,11 +17,11 @@
             </li>
             <li>
                 <Link
-                    href="/dashboard/categories"
-                    :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/categories') }]"
+                    href="/dashboard/check-up"
+                    :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/check-up') }]"
                 >
                     <i class="fa fa-list mr-2"></i>
-                    Categories
+                    Check Up
                 </Link>
             </li>
             <li>
@@ -57,7 +39,7 @@
                     :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/doctors') }]"
                 >
                     <i class="fa fa-hospital-user mr-2"></i>
-                    Doctos
+                    Doctors
                 </Link>
             </li>
             <li>
@@ -75,7 +57,7 @@
                     :class="['sidebar-link', { 'active': $page.url.startsWith('/dashboard/news') }]"
                 >
                     <i class="fa-solid fa-newspaper mr-2"></i>
-                    Blog
+                    News
                 </Link>
             </li>
             <li>

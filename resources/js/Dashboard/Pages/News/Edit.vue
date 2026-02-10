@@ -11,7 +11,7 @@
             @locale-change="setGlobalLocale"
         />
 
-        <h1 class="text-2xl font-bold mb-4">Edit Blog</h1>
+        <h1 class="text-2xl font-bold mb-4">Edit News</h1>
         <Form
             ref="formRef"
             :fields="[
