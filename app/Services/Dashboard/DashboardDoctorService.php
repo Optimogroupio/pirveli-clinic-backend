@@ -185,6 +185,7 @@ class DashboardDoctorService
      * @param array $data
      * @param int $id
      * @return mixed
+     * @throws \Throwable
      */
     public function updateDoctorDetail(array $data, int $id): mixed
     {
@@ -198,7 +199,7 @@ class DashboardDoctorService
             return $model;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to create doctor detail: ' . $e->getMessage());
+            Log::error('Failed to update doctor detail: ' . $e->getMessage());
 
             throw new \RuntimeException('Could not create doctor detail');
         }

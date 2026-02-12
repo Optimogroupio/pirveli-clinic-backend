@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DoctorDetail;
 
 use App\Http\Requests\TranslatableRequest;
+use Carbon\Carbon;
 
 class DashboardUpdateDoctorDetailRequest extends TranslatableRequest
 {
@@ -24,5 +25,13 @@ class DashboardUpdateDoctorDetailRequest extends TranslatableRequest
         ];
 
         return $this->addTranslatableRules(['name', 'title'], $rules);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'start_date' => $this->start_date ? Carbon::parse($this->start_date)->startOfDay() : null,
+            'end_date' => $this->end_date ? Carbon::parse($this->end_date)->endOfDay() : null,
+        ]);
     }
 }
