@@ -94,7 +94,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
             // Specialty
             Route::resource('specialties', DashboardSpecialtyController::class)->except('show');
 
-            // Appointmnets
+            // Appointments
             Route::resource('appointments', DashboardAppointmentController::class)->except('show');
 
             // Categories

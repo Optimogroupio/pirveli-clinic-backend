@@ -19,16 +19,18 @@ use App\Repositories\SpecialtyRepository;
 use App\Services\Dashboard\DashboardDoctorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Request;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class DashboardDoctorController extends Controller
 {
-    protected $doctorService;
-    protected $doctorRepository;
-    protected $serviceRepository;
-    protected $specialtyRepository;
-    protected $languageRepository;
+    protected DashboardDoctorService $doctorService;
+    protected DoctorRepository $doctorRepository;
+    protected ServiceRepository $serviceRepository;
+    protected SpecialtyRepository $specialtyRepository;
+    protected LanguageRepository $languageRepository;
 
-    protected $doctorDetailRepository;
+    protected DoctorDetailRepository $doctorDetailRepository;
 
     public function __construct(DashboardDoctorService $doctorService, DoctorRepository $doctorRepository, ServiceRepository $serviceRepository, SpecialtyRepository $specialtyRepository, LanguageRepository $languageRepository, DoctorDetailRepository $doctorDetailRepository)
     {
@@ -42,7 +44,7 @@ class DashboardDoctorController extends Controller
 
     /**
      * List page
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
     public function index()
     {
@@ -62,7 +64,7 @@ class DashboardDoctorController extends Controller
 
     /**
      * Create page
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
     public function create()
     {
@@ -80,7 +82,7 @@ class DashboardDoctorController extends Controller
     /**
      * Store method
      * @param DashboardStoreDoctorRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(DashboardStoreDoctorRequest $request)
     {
@@ -98,7 +100,7 @@ class DashboardDoctorController extends Controller
     /**
      * Edit page
      * @param $id
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
     public function edit($id)
     {
@@ -119,7 +121,7 @@ class DashboardDoctorController extends Controller
      * Update method
      * @param DashboardUpdateDoctorRequest $request
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(DashboardUpdateDoctorRequest $request, $id)
     {
@@ -137,7 +139,7 @@ class DashboardDoctorController extends Controller
     /**
      * Delete method
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy($id)
     {
@@ -171,8 +173,8 @@ class DashboardDoctorController extends Controller
     }
 
     /**
-     * Create doctor detail page
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * Create a doctor detail page
+     * @return Response|ResponseFactory
      */
     public function createDoctorDetail($doctorId, $type)
     {
@@ -212,8 +214,10 @@ class DashboardDoctorController extends Controller
 
     /**
      * Edit page
-     * @param $id
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @param int $doctorId
+     * @param string $type
+     * @param int $doctorDetailId
+     * @return Response|ResponseFactory
      */
     public function editDoctorDetail(int $doctorId, string $type, int $doctorDetailId)
     {
@@ -233,10 +237,11 @@ class DashboardDoctorController extends Controller
      * @param $type
      * @param $id
      * @return RedirectResponse
+     * @throws \Throwable
      */
     public function updateDoctorDetail(DashboardUpdateDoctorDetailRequest $request, $doctorId, $type, $id)
     {
-        if (!in_array($type, ['educations', 'experiences', 'certifications'])) {
+        if (!in_array($type, ['educations', 'experiences', 'certificates'])) {
             abort(404, 'Invalid detail type');
         }
 
@@ -271,8 +276,7 @@ class DashboardDoctorController extends Controller
     /**
      * Update doctor detail order
      * @param DashboardUpdateDoctorDetailOrder $request
-     * @param $doctorId
-     * @param $type
+     * @param int $doctorId
      * @return RedirectResponse
      */
     public function updateDoctorDetailOrder(DashboardUpdateDoctorDetailOrder $request, int $doctorId)

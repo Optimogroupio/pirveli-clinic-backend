@@ -209,6 +209,7 @@ class DashboardDoctorService
      * Delete doctor detial record
      * @param int $id
      * @return mixed
+     * @throws \Throwable
      */
     public function deleteDoctorDetail(int $id): mixed
     {
