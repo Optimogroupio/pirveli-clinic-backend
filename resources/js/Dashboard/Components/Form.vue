@@ -494,6 +494,24 @@ export default {
             return group.length === 2 ? 'flex' : 'grid grid-cols-1';
         };
 
+        watch(
+            () => state.formData.to_this_day,
+            (newValue) => {
+                if (newValue) {
+                    state.formData.end_date = '';
+                }
+            }
+        );
+
+        watch(
+            () => state.formData.end_date,
+            (newValue) => {
+                if (newValue) {
+                    state.formData.to_this_day = false;
+                }
+            }
+        );
+
         return {
             ...toRefs(state),
             formData: state.formData,
