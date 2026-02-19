@@ -9,8 +9,8 @@ use App\Http\Requests\Doctor\DashboardUpdateDoctorOrderRequest;
 use App\Http\Requests\Doctor\DashboardUpdateDoctorRequest;
 use App\Http\Requests\DoctorDetail\DashboardDeleteMultipleDoctorDetail;
 use App\Http\Requests\DoctorDetail\DashboardStoreDoctorDetailRequest;
-use App\Http\Requests\DoctorDetail\DashboardUpdateDoctorDetailRequest;
 use App\Http\Requests\DoctorDetail\DashboardUpdateDoctorDetailOrder;
+use App\Http\Requests\DoctorDetail\DashboardUpdateDoctorDetailRequest;
 use App\Repositories\DoctorDetailRepository;
 use App\Repositories\DoctorRepository;
 use App\Repositories\LanguageRepository;
@@ -51,7 +51,7 @@ class DashboardDoctorController extends Controller
         $filters = Request::only('search', 'sort_by', 'sort_direction', 'per_page');
         $perPage = $filters['per_page'] ?? 10;
 
-        $perPage = ($perPage === 'all') ? 100 : (int) $perPage;
+        $perPage = ($perPage === 'all') ? 100 : (int)$perPage;
 
         $doctors = $this->doctorService->getPaginatedDoctors($filters, $perPage);
 
@@ -295,13 +295,13 @@ class DashboardDoctorController extends Controller
     /**
      * Delete multiple doctor details
      * @param DashboardDeleteMultipleDoctorDetail $request
-     * @param $doctorId
-     * @param $type
+     * @param int $doctorId
+     * @param string $type
      * @return RedirectResponse
      */
-    public function deleteMultipleDoctorDetails(DashboardDeleteMultipleDoctorDetail $request, int $doctorId)
+    public function deleteMultipleDoctorDetails(DashboardDeleteMultipleDoctorDetail $request, int $doctorId, string $type)
     {
-        $this->doctorService->deleteMultipleDoctorDetails($request->validated());
+        $this->doctorService->deleteMultipleDoctorDetails($request->validated(), $type);
 
         Toast::message('Doctor details was deleted successfully.')
             ->type('success')

@@ -263,16 +263,17 @@ class DashboardDoctorService
      * Delete multiple order details.
      *
      * @param array $data
+     * @param string $type
      * @return bool
-     * @throws \RuntimeException
+     * @throws \Throwable
      */
-    public function deleteMultipleDoctorDetails(array $data): bool
+    public function deleteMultipleDoctorDetails(array $data, string $type): bool
     {
         try {
             DB::beginTransaction();
 
-            foreach ($data['ids'] as $detail) {
-                $this->deleteDoctorDetail($detail);
+            foreach ($data['ids'] as $id) {
+                $this->deleteDoctorDetail($id, $type);
             }
 
             DB::commit();
@@ -280,7 +281,6 @@ class DashboardDoctorService
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to delete multiple doctor details: ' . $e->getMessage());
             throw new \RuntimeException('Could not delete multiple doctor details');
         }
     }

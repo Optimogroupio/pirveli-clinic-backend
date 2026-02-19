@@ -2,8 +2,8 @@
     <div class="table-wrapper">
         <!-- Delete Selected Button (outside the table) -->
         <div v-if="selectedItems.length" class="mb-4">
-            <button @click="confirmDeleteSelected" class="bg-red-600 text-white px-4 py-2 rounded">
-                Delete Selected
+            <button @click="confirmDeleteSelected" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                Delete Selected ({{ selectedItems.length }})
             </button>
         </div>
 
@@ -15,10 +15,14 @@
                     <tr class="text-left font-bold">
                         <!-- Checkbox for selecting all -->
                         <th class="pb-4 pt-6 px-6">
-                            <input type="checkbox" @change="toggleSelectAll"/>
+                            <input
+                                type="checkbox"
+                                :checked="allSelected"
+                                @change="toggleSelectAll"
+                            />
                         </th>
                         <th v-for="column in columns" :key="column.key" :style="{ width: column.width || 'auto' }"
-                            class="pb-4 pt-6 px-6" @click="column.sortable ? toggleSort(column.key) : null">
+                            class="pb-4 pt-6 px-6" :class="{ 'cursor-pointer': column.sortable }" @click="column.sortable ? toggleSort(column.key) : null">
                             {{ column.label }}
                             <i v-if="column.sortable" :class="getSortIconClass(column.key)" class="ml-2"></i>
                         </th>
@@ -26,31 +30,41 @@
                     </tr>
                     </thead>
                     <!-- No Records Message -->
-                    <tr v-if="displayData.length === 0">
+                    <tbody v-if="displayData.length === 0">
+                    <tr>
                         <td :colspan="columns.length + (hasActions ? 2 : 1)" class="text-center py-4 text-gray-500">
                             No records found
                         </td>
                     </tr>
+                    </tbody>
                     <!-- Draggable rows if draggable is true -->
-                    <draggable v-if="draggable" v-model="displayData" tag="tbody" @end="onDragEnd">
+                    <draggable
+                        v-else-if="draggable"
+                        v-model="displayData"
+                        tag="tbody"
+                        @end="onDragEnd"
+                        item-key="id"
+                    >
                         <template #item="{ element: row }">
                             <tr :key="row.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                                 <td class="border-t px-6 py-4">
                                     <input type="checkbox" :value="row.id" v-model="selectedItems"/>
                                 </td>
                                 <td v-for="column in columns" :key="column.key" class="border-t px-6 py-4">
-                                    <img v-if="row[column.key]?.url" :src="row[column.key]?.url" :alt="row[column.key]?.file_name || 'Image'" class="w-24 h-24 rounded">
+                                    <img v-if="row[column.key]?.url" :src="row[column.key]?.url" :alt="row[column.key]?.file_name || 'Image'" class="w-24 h-24 rounded object-cover">
                                     <span v-else>{{ formatColumnValue(row[column.key], column) }}</span>
                                 </td>
                                 <td v-if="hasActions" class="border-t px-6 py-4">
-                                    <button v-if="canEdit" @click="$emit('edit', row.id)"
-                                            class="flex items-center text-white bg-primary hover:bg-primary-dark px-4 py-2 rounded mr-2">
-                                        <i class="fa fa-edit mr-2"></i> Edit
-                                    </button>
-                                    <button v-if="canDelete" @click="confirmDelete(row.id)"
-                                            class="flex items-center text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
-                                        <i class="fa fa-trash mr-2"></i> Delete
-                                    </button>
+                                    <div class="flex space-x-2">
+                                        <button v-if="canEdit" @click="$emit('edit', row.id)"
+                                                class="flex items-center text-white bg-primary hover:bg-primary-dark px-4 py-2 rounded">
+                                            <i class="fa fa-edit mr-2"></i> Edit
+                                        </button>
+                                        <button v-if="canDelete" @click="confirmDelete(row.id)"
+                                                class="flex items-center text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
+                                            <i class="fa fa-trash mr-2"></i> Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </template>
@@ -62,18 +76,20 @@
                             <input type="checkbox" :value="row.id" v-model="selectedItems"/>
                         </td>
                         <td v-for="column in columns" :key="column.key" class="border-t px-6 py-4">
-                            <img v-if="row[column.key]?.url" :src="row[column.key]?.url" :alt="row[column.key]?.file_name || 'Image'" class="w-24 h-24 rounded">
+                            <img v-if="row[column.key]?.url" :src="row[column.key]?.url" :alt="row[column.key]?.file_name || 'Image'" class="w-24 h-24 rounded object-cover">
                             <span v-else>{{ formatColumnValue(row[column.key], column) }}</span>
                         </td>
                         <td v-if="hasActions" class="border-t px-6 py-4">
-                            <button v-if="canEdit" @click="$emit('edit', row.id)"
-                                    class="flex items-center text-white bg-primary hover:bg-primary-dark px-4 py-2 rounded mr-2">
-                                <i class="fa fa-edit mr-2"></i> Edit
-                            </button>
-                            <button v-if="canDelete" @click="confirmDelete(row.id)"
-                                    class="flex items-center text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
-                                <i class="fa fa-trash mr-2"></i> Delete
-                            </button>
+                            <div class="flex space-x-2">
+                                <button v-if="canEdit" @click="$emit('edit', row.id)"
+                                        class="flex items-center text-white bg-primary hover:bg-primary-dark px-4 py-2 rounded">
+                                    <i class="fa fa-edit mr-2"></i> Edit
+                                </button>
+                                <button v-if="canDelete" @click="confirmDelete(row.id)"
+                                        class="flex items-center text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
+                                    <i class="fa fa-trash mr-2"></i> Delete
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
@@ -82,7 +98,7 @@
         </div>
 
         <!-- Pagination Controls -->
-        <div v-if="paginated && paginationLinks" class="mt-10">
+        <div v-if="paginated && paginationLinks && paginationLinks.length > 0" class="mt-10">
             <pagination :links="paginationLinks"/>
         </div>
 
@@ -104,6 +120,7 @@ import ConfirmModal from '@/Dashboard/Components/ConfirmModal.vue';
 import draggable from 'vuedraggable';
 
 export default {
+    name: 'Table',
     components: {
         Pagination,
         ConfirmModal,
@@ -146,7 +163,12 @@ export default {
             type: Boolean,
             default: false,
         },
+        showCheckbox: {
+            type: Boolean,
+            default: true,
+        }
     },
+    emits: ['edit', 'delete', 'delete-multiple', 'reorder', 'update:sortBy', 'update:sortDirection'],
     data() {
         return {
             isModalVisible: false,
@@ -161,13 +183,9 @@ export default {
             immediate: true,
             handler(newData) {
                 this.updateDisplayData(newData);
+                // Clear selected items when data changes
+                this.selectedItems = [];
             },
-        },
-        paginated: {
-            immediate: true,
-            handler() {
-                this.updateDisplayData(this.data);
-            }
         },
     },
     computed: {
@@ -175,23 +193,22 @@ export default {
             return this.canEdit || this.canDelete;
         },
         allSelected() {
-            return this.selectedItems.length === this.displayData.length;
+            return this.displayData.length > 0 && this.selectedItems.length === this.displayData.length;
         },
         modalTitle() {
             return this.isMultipleDelete ? "Confirm Multiple Deletion" : "Confirm Deletion";
         },
         modalMessage() {
             return this.isMultipleDelete
-                ? "Are you sure you want to delete the selected items?"
+                ? `Are you sure you want to delete ${this.selectedItems.length} selected item(s)?`
                 : "Are you sure you want to delete this item?";
         },
     },
     methods: {
         updateDisplayData(newData) {
-            // this.displayData = this.paginated ? newData.slice(0, 10) : [...newData];
-            if (this.paginated) {
-                const perPage = this.$attrs["per-page"] || 10;
-                this.displayData = perPage === 'all' ? newData : newData.slice(0, perPage);
+            if (this.paginated && this.paginationLinks) {
+                // If paginated, use the data as is (it should already be paginated from the server)
+                this.displayData = [...newData];
             } else {
                 this.displayData = [...newData];
             }
@@ -213,6 +230,9 @@ export default {
             this.isModalVisible = true;
         },
         confirmDeleteSelected() {
+            if (this.selectedItems.length === 0) {
+                return;
+            }
             this.isMultipleDelete = true;
             this.isModalVisible = true;
         },
@@ -222,7 +242,8 @@ export default {
         },
         confirmDeleteAction() {
             if (this.isMultipleDelete) {
-                this.$emit('delete-multiple', this.selectedItems);
+                // Emit the event with the selected IDs
+                this.$emit('delete-multiple', [...this.selectedItems]);
                 this.selectedItems = [];
             } else {
                 this.$emit('delete', this.itemToDelete);
@@ -230,32 +251,49 @@ export default {
             this.closeModal();
         },
         formatColumnValue(value, column) {
-            console.log(value)
             if (value === null || value === undefined) {
                 return 'N/A';
             }
 
-            if (Array.isArray(value) && value.length > 0) {
-                const attribute = column.relationAttribute || 'name'; // Default to 'name' if not specified
-                return value.map(item => item[attribute] || 'N/A').join(', ');
+            if (Array.isArray(value)) {
+                if (value.length === 0) {
+                    return 'N/A';
+                }
+                const attribute = column.relationAttribute || 'name';
+                return value.map(item => {
+                    if (typeof item === 'object' && item !== null) {
+                        return item[attribute] || 'N/A';
+                    }
+                    return item;
+                }).join(', ');
             }
 
-            if (column.stripHtml) {
+            if (typeof value === 'object' && value !== null) {
+                // Handle relationship objects
+                if (column.relationAttribute && value[column.relationAttribute]) {
+                    return value[column.relationAttribute];
+                }
+                return JSON.stringify(value);
+            }
+
+            if (column.stripHtml && typeof value === 'string') {
                 const parser = new DOMParser();
                 const parsedDoc = parser.parseFromString(value, 'text/html');
                 value = parsedDoc.body.textContent || '';
             }
 
-            if (column.limit && value.length > column.limit) {
+            if (column.limit && typeof value === 'string' && value.length > column.limit) {
                 value = value.slice(0, column.limit) + '...';
             }
 
             return value;
         },
         toggleSelectAll(event) {
-            this.selectedItems = event.target.checked
-                ? this.displayData.map(row => row.id)
-                : [];
+            if (event.target.checked) {
+                this.selectedItems = this.displayData.map(row => row.id);
+            } else {
+                this.selectedItems = [];
+            }
         },
         onDragEnd() {
             const reorderedData = this.displayData.map((item, index) => ({
@@ -278,6 +316,7 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s;
 }
 
 button i {
@@ -286,5 +325,13 @@ button i {
 
 .fa-sort-up, .fa-sort-down, .fa-sort {
     margin-left: 0.5rem;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.object-cover {
+    object-fit: cover;
 }
 </style>

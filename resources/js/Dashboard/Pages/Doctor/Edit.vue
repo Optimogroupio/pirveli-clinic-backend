@@ -62,7 +62,7 @@
                 :sortDirection="'asc'"
                 :draggable="true"
                 @reorder="updateOrder"
-                @delete-multiple="deleteMultipleEducations"
+                @delete-multiple="(ids) => deleteMultiple(ids, 'educations')"
                 @edit="editEducation"
                 @delete="deleteEducation"
             />
@@ -88,6 +88,8 @@
                 :can-edit="true"
                 :can-delete="true"
                 :paginated="false"
+                :showCheckbox="true"
+                @delete-multiple="(ids) => deleteMultiple(ids, 'experiences')"
                 @edit="editExperience"
                 @delete="deleteExperience"
             />
@@ -113,6 +115,8 @@
                 :can-edit="true"
                 :can-delete="true"
                 :paginated="false"
+                :showCheckbox="true"
+                @delete-multiple="(ids) => deleteMultiple(ids, 'certificates')"
                 @edit="editCertificate"
                 @delete="deleteCertificate"
             />
@@ -127,6 +131,7 @@ import Breadcrumbs from '@/Dashboard/Components/Breadcrumbs.vue';
 import GlobalLocaleSwitcher from '@/Dashboard/Components/GlobalLocaleSwitcher.vue';
 import { router as Inertia, usePage } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import axios from 'axios';
 
 export default {
     components: {Form, Table, Breadcrumbs, GlobalLocaleSwitcher},
@@ -136,13 +141,12 @@ export default {
         specialties: Array,
         languages: Array,
     },
-    setup() {
-        const { props } = usePage();
-        const doctor = props.doctor;
+    setup(props) {
+        const { props: pageProps } = usePage();
         const formRef = ref(null);
 
         // Get locales from page props
-        const locales = computed(() => props.locales || []);
+        const locales = computed(() => pageProps.locales || []);
 
         // Get default locale from page props
         const defaultLocale = computed(() => {
@@ -160,7 +164,7 @@ export default {
                 Object.entries(data).filter(([_, value]) => value !== null && value !== '')
             );
             filteredData._method =  "put";
-            Inertia.post(`/dashboard/doctors/${doctor.id}`, filteredData);
+            Inertia.post(`/dashboard/doctors/${props.doctor.id}`, filteredData);
         };
 
         const setGlobalLocale = (locale) => {
@@ -174,52 +178,67 @@ export default {
 
         // Education methods
         const createEducation = () => {
-            Inertia.get(`/dashboard/doctors/${doctor.id}/doctor-details/educations/create`);
+            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/educations/create`);
         };
 
         const editEducation = (id) => {
-            Inertia.get(`/dashboard/doctors/${doctor.id}/doctor-details/educations/${id}/edit`);
+            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/educations/${id}/edit`);
         };
 
         const deleteEducation = (id) => {
-            Inertia.delete(`/dashboard/doctors/${doctor.id}/doctor-details/educations/${id}`);
+            Inertia.delete(`/dashboard/doctors/${props.doctor.id}/doctor-details/educations/${id}`);
         };
 
         // Experience methods
         const createExperience = () => {
-            Inertia.get(`/dashboard/doctors/${doctor.id}/doctor-details/experiences/create`);
+            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/experiences/create`);
         };
 
         const editExperience = (id) => {
-            Inertia.get(`/dashboard/doctors/${doctor.id}/doctor-details/experiences/${id}/edit`);
+            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/experiences/${id}/edit`);
         };
 
         const deleteExperience = (id) => {
-            Inertia.delete(`/dashboard/doctors/${doctor.id}/doctor-details/experiences/${id}`);
+            Inertia.delete(`/dashboard/doctors/${props.doctor.id}/doctor-details/experiences/${id}`);
         };
 
         // Certificate methods
         const createCertificate = () => {
-            Inertia.get(`/dashboard/doctors/${doctor.id}/doctor-details/certificates/create`);
+            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/certificates/create`);
         };
 
         const editCertificate = (id) => {
-            Inertia.get(`/dashboard/doctors/${doctor.id}/doctor-details/certificates/${id}/edit`);
+            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/certificates/${id}/edit`);
         };
 
         const deleteCertificate = (id) => {
-            Inertia.delete(`/dashboard/doctors/${doctor.id}/doctor-details/certificates/${id}`);
+            Inertia.delete(`/dashboard/doctors/${props.doctor.id}/doctor-details/certificates/${id}`);
         };
 
         const updateOrder = async (orderedIds) => {
-            await axios.post(`/dashboard/doctors/${doctor.id}/update-detail-order`, { orderedIds });
+            try {
+                await axios.post(`/dashboard/doctors/${props.doctor.id}/update-detail-order`, { orderedIds });
+            } catch (error) {
+                console.error('Error updating order:', error);
+            }
         };
 
-        const deleteMultipleEducations = (selectedIds) => {
-            Inertia.delete(`/dashboard/doctors/${doctor.id}/delete-multiple-details`, {
-                data: { ids: selectedIds },
+        const deleteMultiple = (selectedIds, type) => {
+            if (!selectedIds || selectedIds.length === 0) {
+                return;
+            }
+
+            Inertia.delete(`/dashboard/doctors/${props.doctor.id}/delete-multiple-details`, {
+                data: {
+                    ids: selectedIds,
+                    type: type
+                },
+                preserveScroll: true,
                 onSuccess: () => {
-                    console.log('here')
+                    // Optional: Show success message
+                },
+                onError: (errors) => {
+                    console.error('Error deleting items:', errors);
                 }
             });
         };
@@ -250,7 +269,7 @@ export default {
         ];
 
         return {
-            doctor,
+            doctor: props.doctor,
             locales,
             formRef,
             globalLocale,
@@ -270,7 +289,7 @@ export default {
             editCertificate,
             deleteCertificate,
             updateOrder,
-            deleteMultipleEducations
+            deleteMultiple
         };
     }
 };
