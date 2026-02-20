@@ -256,6 +256,13 @@ class DashboardDoctorController extends Controller
         return redirect()->route('dashboard.doctors.edit', $doctorId);
     }
 
+    /**
+     * @param $doctorId
+     * @param $type
+     * @param $id
+     * @return RedirectResponse
+     * @throws \Throwable
+     */
     public function destroyDoctorDetail($doctorId, $type, $id)
     {
         if (!in_array($type, ['educations', 'experiences', 'certificates'])) {
@@ -296,12 +303,12 @@ class DashboardDoctorController extends Controller
      * Delete multiple doctor details
      * @param DashboardDeleteMultipleDoctorDetail $request
      * @param int $doctorId
-     * @param string $type
      * @return RedirectResponse
+     * @throws \Throwable
      */
-    public function deleteMultipleDoctorDetails(DashboardDeleteMultipleDoctorDetail $request, int $doctorId, string $type)
+    public function deleteMultipleDoctorDetails(DashboardDeleteMultipleDoctorDetail $request, int $doctorId)
     {
-        $this->doctorService->deleteMultipleDoctorDetails($request->validated(), $type);
+        $this->doctorService->deleteMultipleDoctorDetails($request->validated());
 
         Toast::message('Doctor details was deleted successfully.')
             ->type('success')

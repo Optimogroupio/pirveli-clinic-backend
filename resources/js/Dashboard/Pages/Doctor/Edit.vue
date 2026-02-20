@@ -2,19 +2,8 @@
     <div>
         <!-- Breadcrumbs and Doctor Form -->
         <breadcrumbs :recordName="doctor.full_name"/>
-
-        <!-- Global Locale Switcher -->
-        <GlobalLocaleSwitcher
-            v-if="locales.length > 1"
-            :currentLocale="globalLocale"
-            :locales="locales"
-            :hasFieldOverrides="hasFieldOverrides"
-            @locale-change="setGlobalLocale"
-        />
-
         <h1 class="text-2xl font-bold mb-4">Edit Doctor</h1>
         <Form
-            ref="formRef"
             :fields="[
                 { key: 'full_name', label: 'Full Name', type: 'text', placeholder: 'Enter full name', size: 'inline', translatable: true },
                 { key: 'specialties', label: 'Specialty', type: 'multi-select', options: specialties, labelKey: 'name', valueKey: 'id', placeholder: 'Select specialty', size: 'inline'},
@@ -31,9 +20,7 @@
                 specialties: (doctor.specialties || []).map(specialty => specialty.id),
                 service_id: doctor.service_id,
                 languages: (doctor.languages || []).map(language => language.id),
-                translations: doctor.translations,
             }"
-            :globalLocale="globalLocale"
             submitLabel="Update"
             @submit="handleUpdate"
         />
@@ -62,7 +49,7 @@
                 :sortDirection="'asc'"
                 :draggable="true"
                 @reorder="updateOrder"
-                @delete-multiple="(ids) => deleteMultiple(ids, 'educations')"
+                @delete-multiple="deleteEducations"
                 @edit="editEducation"
                 @delete="deleteEducation"
             />
@@ -88,8 +75,8 @@
                 :can-edit="true"
                 :can-delete="true"
                 :paginated="false"
-                :showCheckbox="true"
-                @delete-multiple="(ids) => deleteMultiple(ids, 'experiences')"
+                @reorder="updateOrder"
+                @delete-multiple="deleteExperiences"
                 @edit="editExperience"
                 @delete="deleteExperience"
             />
@@ -115,8 +102,8 @@
                 :can-edit="true"
                 :can-delete="true"
                 :paginated="false"
-                :showCheckbox="true"
-                @delete-multiple="(ids) => deleteMultiple(ids, 'certificates')"
+                @reorder="updateOrder"
+                @delete-multiple="deleteCertificates"
                 @edit="editCertificate"
                 @delete="deleteCertificate"
             />
@@ -128,169 +115,105 @@
 import Form from '@/Dashboard/Components/Form.vue';
 import Table from '@/Dashboard/Components/Table.vue';
 import Breadcrumbs from '@/Dashboard/Components/Breadcrumbs.vue';
-import GlobalLocaleSwitcher from '@/Dashboard/Components/GlobalLocaleSwitcher.vue';
-import { router as Inertia, usePage } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
-import axios from 'axios';
+import {router as Inertia} from '@inertiajs/vue3';
 
 export default {
-    components: {Form, Table, Breadcrumbs, GlobalLocaleSwitcher},
+    components: {Form, Table, Breadcrumbs},
     props: {
         doctor: Object,
         services: Array,
         specialties: Array,
         languages: Array,
     },
-    setup(props) {
-        const { props: pageProps } = usePage();
-        const formRef = ref(null);
-
-        // Get locales from page props
-        const locales = computed(() => pageProps.locales || []);
-
-        // Get default locale from page props
-        const defaultLocale = computed(() => {
-            return locales.value.find(locale => locale.is_default)?.code || 'en';
-        });
-
-        // Reactive state for global locale
-        const globalLocale = ref(defaultLocale.value);
-
-        // Track field overrides
-        const hasFieldOverrides = ref(false);
-
-        const handleUpdate = (data) => {
+    data() {
+        return {
+            educationColumns: [
+                {key: 'name', label: 'Name', width: '20%'},
+                {key: 'title', label: 'Title', width: '20%'},
+                {key: 'start_date', label: 'Start date', width: '20%'},
+                {key: 'end_date', label: 'End date', width: '20%'},
+                {key: 'to_this_day', label: 'To this day', width: '20%'},
+            ],
+            experienceColumns: [
+                {key: 'name', label: 'Name', width: '20%'},
+                {key: 'title', label: 'Title', width: '20%'},
+                {key: 'start_date', label: 'Start date', width: '20%'},
+                {key: 'end_date', label: 'End date', width: '20%'},
+                {key: 'to_this_day', label: 'To this day', width: '20%'},
+            ],
+            certificateColumns: [
+                {key: 'name', label: 'Name', width: '20%'},
+                {key: 'title', label: 'Title', width: '20%'},
+                {key: 'start_date', label: 'Start date', width: '20%'},
+                {key: 'end_date', label: 'End date', width: '20%'},
+                {key: 'to_this_day', label: 'To this day', width: '20%'},
+            ],
+        };
+    },
+    methods: {
+        handleUpdate(data) {
             const filteredData = Object.fromEntries(
                 Object.entries(data).filter(([_, value]) => value !== null && value !== '')
             );
             filteredData._method =  "put";
-            Inertia.post(`/dashboard/doctors/${props.doctor.id}`, filteredData);
-        };
-
-        const setGlobalLocale = (locale) => {
-            globalLocale.value = locale;
-
-            // Call form method to update all fields if formRef exists
-            if (formRef.value && formRef.value.setGlobalLocale) {
-                formRef.value.setGlobalLocale(locale);
-            }
-        };
-
-        // Education methods
-        const createEducation = () => {
-            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/educations/create`);
-        };
-
-        const editEducation = (id) => {
-            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/educations/${id}/edit`);
-        };
-
-        const deleteEducation = (id) => {
-            Inertia.delete(`/dashboard/doctors/${props.doctor.id}/doctor-details/educations/${id}`);
-        };
-
-        // Experience methods
-        const createExperience = () => {
-            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/experiences/create`);
-        };
-
-        const editExperience = (id) => {
-            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/experiences/${id}/edit`);
-        };
-
-        const deleteExperience = (id) => {
-            Inertia.delete(`/dashboard/doctors/${props.doctor.id}/doctor-details/experiences/${id}`);
-        };
-
-        // Certificate methods
-        const createCertificate = () => {
-            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/certificates/create`);
-        };
-
-        const editCertificate = (id) => {
-            Inertia.get(`/dashboard/doctors/${props.doctor.id}/doctor-details/certificates/${id}/edit`);
-        };
-
-        const deleteCertificate = (id) => {
-            Inertia.delete(`/dashboard/doctors/${props.doctor.id}/doctor-details/certificates/${id}`);
-        };
-
-        const updateOrder = async (orderedIds) => {
-            try {
-                await axios.post(`/dashboard/doctors/${props.doctor.id}/update-detail-order`, { orderedIds });
-            } catch (error) {
-                console.error('Error updating order:', error);
-            }
-        };
-
-        const deleteMultiple = (selectedIds, type) => {
-            if (!selectedIds || selectedIds.length === 0) {
-                return;
-            }
-
-            Inertia.delete(`/dashboard/doctors/${props.doctor.id}/delete-multiple-details`, {
-                data: {
-                    ids: selectedIds,
-                    type: type
-                },
-                preserveScroll: true,
+            Inertia.post(`/dashboard/doctors/${this.doctor.id}`, filteredData);
+        },
+        createEducation() {
+            Inertia.get(`/dashboard/doctors/${this.doctor.id}/doctor-details/educations/create`);
+        },
+        editEducation(id) {
+            Inertia.get(`/dashboard/doctors/${this.doctor.id}/doctor-details/educations/${id}/edit`);
+        },
+        deleteEducation(id) {
+            Inertia.delete(`/dashboard/doctors/${this.doctor.id}/doctor-details/educations/${id}`);
+        },
+        createExperience() {
+            Inertia.get(`/dashboard/doctors/${this.doctor.id}/doctor-details/experiences/create`);
+        },
+        editExperience(id) {
+            Inertia.get(`/dashboard/doctors/${this.doctor.id}/doctor-details/experiences/${id}/edit`);
+        },
+        deleteExperience(id) {
+            Inertia.delete(`/dashboard/doctors/${this.doctor.id}/doctor-details/experiences/${id}`);
+        },
+        createCertificate() {
+            Inertia.get(`/dashboard/doctors/${this.doctor.id}/doctor-details/certificates/create`);
+        },
+        editCertificate(id) {
+            Inertia.get(`/dashboard/doctors/${this.doctor.id}/doctor-details/certificates/${id}/edit`);
+        },
+        deleteCertificate(id) {
+            Inertia.delete(`/dashboard/doctors/${this.doctor.id}/doctor-details/certificates/${id}`);
+        },
+        async updateOrder(orderedIds) {
+            await axios.post(`/dashboard/doctors/${this.doctor.id}/update-detail-order`, { orderedIds });
+        },
+        deleteEducations(selectedIds) {
+            Inertia.delete(`/dashboard/doctors/${this.doctor.id}/delete-multiple-details`, {
+                data: { ids: selectedIds },
                 onSuccess: () => {
-                    // Optional: Show success message
-                },
-                onError: (errors) => {
-                    console.error('Error deleting items:', errors);
+                    console.log('deleted multiple education')
                 }
             });
-        };
+        },
+        deleteExperiences(selectedIds) {
+            Inertia.delete(`/dashboard/doctors/${this.doctor.id}/delete-multiple-details`, {
+                data: { ids: selectedIds },
+                onSuccess: () => {
+                    console.log('deleted multiple experience')
+                }
+            });
+        },
+        deleteCertificates(selectedIds) {
+            Inertia.delete(`/dashboard/doctors/${this.doctor.id}/delete-multiple-details`, {
+                data: { ids: selectedIds },
+                onSuccess: () => {
+                    console.log('deleted multiple certificate')
+                }
+            });
+        }
 
-        // Return data for template
-        const educationColumns = [
-            {key: 'name', label: 'Name', width: '20%'},
-            {key: 'title', label: 'Title', width: '20%'},
-            {key: 'start_date', label: 'Start date', width: '20%'},
-            {key: 'end_date', label: 'End date', width: '20%'},
-            {key: 'to_this_day', label: 'To this day', width: '20%'},
-        ];
-
-        const experienceColumns = [
-            {key: 'name', label: 'Name', width: '20%'},
-            {key: 'title', label: 'Title', width: '20%'},
-            {key: 'start_date', label: 'Start date', width: '20%'},
-            {key: 'end_date', label: 'End date', width: '20%'},
-            {key: 'to_this_day', label: 'To this day', width: '20%'},
-        ];
-
-        const certificateColumns = [
-            {key: 'name', label: 'Name', width: '20%'},
-            {key: 'title', label: 'Title', width: '20%'},
-            {key: 'start_date', label: 'Start date', width: '20%'},
-            {key: 'end_date', label: 'End date', width: '20%'},
-            {key: 'to_this_day', label: 'To this day', width: '20%'},
-        ];
-
-        return {
-            doctor: props.doctor,
-            locales,
-            formRef,
-            globalLocale,
-            hasFieldOverrides,
-            educationColumns,
-            experienceColumns,
-            certificateColumns,
-            handleUpdate,
-            setGlobalLocale,
-            createEducation,
-            editEducation,
-            deleteEducation,
-            createExperience,
-            editExperience,
-            deleteExperience,
-            createCertificate,
-            editCertificate,
-            deleteCertificate,
-            updateOrder,
-            deleteMultiple
-        };
     }
 };
 </script>
+

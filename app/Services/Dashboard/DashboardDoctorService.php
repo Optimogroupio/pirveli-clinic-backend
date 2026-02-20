@@ -206,7 +206,7 @@ class DashboardDoctorService
     }
 
     /**
-     * Delete doctor detial record
+     * Delete doctor detail record
      * @param int $id
      * @return mixed
      * @throws \Throwable
@@ -232,7 +232,7 @@ class DashboardDoctorService
      *
      * @param array $data
      * @return bool
-     * @throws \RuntimeException
+     * @throws \RuntimeException|\Throwable
      */
     public function updateDoctorDetailOrder(array $data): bool
     {
@@ -263,17 +263,16 @@ class DashboardDoctorService
      * Delete multiple order details.
      *
      * @param array $data
-     * @param string $type
      * @return bool
      * @throws \Throwable
      */
-    public function deleteMultipleDoctorDetails(array $data, string $type): bool
+    public function deleteMultipleDoctorDetails(array $data): bool
     {
         try {
             DB::beginTransaction();
 
             foreach ($data['ids'] as $id) {
-                $this->deleteDoctorDetail($id, $type);
+                $this->deleteDoctorDetail($id);
             }
 
             DB::commit();

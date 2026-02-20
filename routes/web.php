@@ -110,7 +110,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
                         Route::delete('/{id}', [DashboardDoctorController::class, 'destroyDoctorDetail'])->name('doctor_details.destroy');
                     });
                 Route::post('/update-detail-order', [DashboardDoctorController::class, 'updateDoctorDetailOrder'])->name('doctor_details.reorder');
-                Route::delete('/delete-multiple',
+                Route::delete('/delete-multiple-details',
                     [DashboardDoctorController::class, 'deleteMultipleDoctorDetails']
                 )->name('doctor_details.delete_multiple');
             });
